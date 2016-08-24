@@ -12,25 +12,27 @@ iterations=1
 n=0
 c=0
 
-cprefix="client"
+cprefix="rhclient"
 numclients=12
-lastclient=$(($c+$numcclients-1))
+#lastclient=$(($c+$numcclients-1))
+lastclient=$(echo "$c+$numclients-1" | bc)
 
-sprefix="server"
+sprefix="rhosd"
 numservers=6
-lastserver=$(($n+$numservers-1))
+#lastserver=$(($n+$numservers-1))
+lastserver=$(echo "n+$numservers-1" | bc)
 
 # In this test, we have 12 client nodes named client0 through client11
-for i in {${c}..${lastclient}}; do
+for i in $(seq ${c} ${lastclient}); do
   #start iperf server processes
   ssh root@${cprefix}${i} "pkill -9 iperf; pkill -9 iperf3; /usr/bin/iperf3 -s -D"
 done
 
 # In this test, we have 6 server nodes named server0 through server5
-for server in {${n}..${lastserver}}; do
+for server in $(seq ${n} ${lastserver}); do
 #for server in 0; do
   #one-to-one full mesh tests
-  for client in {${c}..${lastclient}}; do
+  for client in $(seq ${c} ${lastclient}); do
   #for clients in 0; do
     testname=iperf--bidirectional-n${server}-c${client}--1-10gbe-to-1-1gbe-10-min-10-proc
     tool=`echo ${testname} | awk -F-- '{print $1}'`
@@ -56,7 +58,7 @@ for server in {${n}..${lastserver}}; do
   server=$[$server+1]
 done
 
-for i in {${c}..${lastclient}}; do
+for i in $(seq ${c} ${lastclient}); do
   #stop iperf server processes
   ssh root@rhclient${i} "pkill -9 iperf; pkill -9 iperf3"
   #ssh root@rhclient${i} "hostname; ps -ef | grep iperf"
