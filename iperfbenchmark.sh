@@ -32,7 +32,7 @@ for server in $(seq ${s} ${lastserver}); do
   # Run one-to-one full mesh tests
   for client in $(seq ${c} ${lastclient}); do
     # We use a naming convention with "sections" broken by -- which we parse below into our git branches
-    testname=iperf--n${server}-c${client}--1-10gbe-to-1-1gbe-10-min-10-proc
+    testname=iperf--bidirectional-n${server}-c${client}--1-10gbe-to-1-1gbe-10-min-10-proc
     tool=`echo ${testname} | awk -F-- '{print $1}'`
     test=`echo ${testname} | awk -F-- '{print $2}'`
     testconfig=`echo ${testname} | awk -F-- '{print $3}'`
@@ -44,8 +44,7 @@ for server in $(seq ${s} ${lastserver}); do
 
     i=0
     while [ $i -lt ${iterations} ]; do
-      #cmd="${workload} && ${workload} -R"
-      cmd="${workload}"
+      cmd="${workload} && ${workload} -R"
       ssh root@rhosd${server} "$cmd" | tee -a ${testname}.results
       i=$[$i+1]
     done
