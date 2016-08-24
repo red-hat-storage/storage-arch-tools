@@ -8,19 +8,17 @@ PATH=$PATH:/root/bin
 # How many times to run each test
 iterations=1
 
-# Starting numeration for servers (n) and clients (c)
-n=0
+# Starting numeration for servers (s) and clients (c)
+s=0
 c=0
 
 cprefix="rhclient"
 numclients=12
-#lastclient=$(($c+$numcclients-1))
 lastclient=$(echo "$c+$numclients-1" | bc)
 
 sprefix="rhosd"
 numservers=6
-#lastserver=$(($n+$numservers-1))
-lastserver=$(echo "n+$numservers-1" | bc)
+lastserver=$(echo "$s+$numservers-1" | bc)
 
 # In this test, we have 12 client nodes named client0 through client11
 for i in $(seq ${c} ${lastclient}); do
@@ -29,7 +27,7 @@ for i in $(seq ${c} ${lastclient}); do
 done
 
 # In this test, we have 6 server nodes named server0 through server5
-for server in $(seq ${n} ${lastserver}); do
+for server in $(seq ${s} ${lastserver}); do
 #for server in 0; do
   #one-to-one full mesh tests
   for client in $(seq ${c} ${lastclient}); do
