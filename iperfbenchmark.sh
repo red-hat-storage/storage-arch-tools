@@ -45,7 +45,7 @@ for server in $(seq ${s} ${lastserver}); do
     i=0
     while [ $i -lt ${iterations} ]; do
       cmd="${workload} && ${workload} -R"
-      ssh root@rhosd${server} "$cmd" | tee -a ${testname}.results
+      ssh -t root@rhosd${server} "$cmd" | tee -a ${testname}.results
       i=$[$i+1]
     done
 
