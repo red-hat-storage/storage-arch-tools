@@ -53,7 +53,7 @@ for server in $(seq ${s} ${lastserver}); do
 
         # Initiate workload
         cmd="${workload}"
-        if [ ${bidirectional} ]; then cmd="${cmd} && ${workload} -R"; fi
+        if [ "${bidirectional}" = true ]; then cmd="${cmd} && ${workload} -R"; fi
         ssh -t root@${sprefix}${server} "$cmd" | tee -a ${testname}-$(date +%F-%H-%M-%S).results
 
         i=$[$i+1]
