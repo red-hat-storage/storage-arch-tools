@@ -48,7 +48,7 @@ for server in $(seq ${s} ${lastserver}); do
 
       # Initiate workload
       cmd="${workload} && ${workload} -R"
-      ssh -t root@rhosd${server} "$cmd" | tee -a ${testname}.results
+      ssh -t root@${sprefix}${server} "$cmd" | tee -a ${testname}.results
 
       i=$[$i+1]
     done
