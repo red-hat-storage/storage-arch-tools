@@ -72,11 +72,14 @@ for client in $(seq ${c} ${lastclient}); do
         ssh root@${sprefix}${server} "pkill -x -9 iperf; pkill -x -9 iperf3; ${iperf3} -s -D"
 
         # Initiate workload
+        resultsfile="${testname}-$(date +%F-%H-%M-%S).results"
         cmd="${workload}"
         if [ "${bidirectional}" = true ]; then cmd="${cmd} && ${workload} -R"; fi
         echo "Client workload is '${cmd}'"
         echo "Initiating workload iteration ${i} of ${iterations}..."
-        ssh -t root@${cprefix}${client} "${cmd}" | tee -a ${testname}-$(date +%F-%H-%M-%S).results >/dev/null 2>&1
+        echo "  Iteration runtime will be ${ipruntime} seconds, during which there will be no console output."
+        echo "  See ${resultsfile} for test output."
+        ssh -t root@${cprefix}${client} "${cmd}" | tee -a ${resultsfile} >/dev/null 2>&1
 
         i=$[$i+1]
       done
