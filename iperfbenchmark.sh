@@ -66,7 +66,7 @@ for server in $(seq ${s} ${lastserver}); do
   server=$[$server+1]
 done
 
+# Stop all iperf server processes
 for client in $(seq ${c} ${lastclient}); do
-  #stop iperf server processes
   ssh root@${cprefix}${client} "pkill -9 iperf; pkill -9 iperf3"
 done
