@@ -59,7 +59,7 @@ for server in $(seq ${s} ${lastserver}); do
       done
 
       git add *
-      git commit -am "${testname} `date`"
+      git commit -am "${testname} $(date)"
     fi
     client=$[$client+1]
   done
