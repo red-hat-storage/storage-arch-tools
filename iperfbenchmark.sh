@@ -60,6 +60,8 @@ for server in $(seq ${s} ${lastserver}); do
 
       git add *
       git commit -am "${testname} $(date)"
+    else
+      echo "Skipping test against self..."
     fi
     client=$[$client+1]
   done
