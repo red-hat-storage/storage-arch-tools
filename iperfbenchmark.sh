@@ -62,8 +62,13 @@ for client in $(seq ${c} ${lastclient}); do
 
       echo "Changing to ${repopath} working directory..."
       cd ${repopath}
-      echo "Checking out git repository ${gitrepo}..."
-      git checkout ${gitrepo} 2>/dev/null || git checkout -b ${gitrepo} master
+      if [ $? -ne 0 ]; then
+        gitabort=1
+        echo "Error changing to ${repopath}; aborting git checkout but continuing tests..."
+      else
+        echo "Checking out git repository ${gitrepo}..."
+        git checkout ${gitrepo} 2>/dev/null || git checkout -b ${gitrepo} master
+      fi
 
       i=1
       while [ $i -le ${iterations} ]; do
@@ -84,9 +89,11 @@ for client in $(seq ${c} ${lastclient}); do
         i=$[$i+1]
       done
 
-      "Adding and committing results file to git repo..."
-      git add *
-      git commit -am "${testname} $(date)"
+      if [ $gitabort -ne 1 ]; then
+        "Adding and committing results file to git repo..."
+        git add *
+        git commit -am "${testname} $(date)"
+      fi
     else
       echo "Skipping test against self (${cprefix}${client} to ${sprefix}${server})..."
     fi
