@@ -65,7 +65,7 @@ for client in $(seq ${c} ${lastclient}); do
       if [ $? -ne 0 ]; then
         gitabort=1
         echo "Error changing to ${repopath}; aborting git checkout but continuing with tests..."
-        echo "Results files will be placed in $PWD...
+        echo "Results files will be placed in $PWD..."
       else
         echo "Checking out git repository ${gitrepo}..."
         git checkout ${gitrepo} 2>/dev/null || git checkout -b ${gitrepo} master
