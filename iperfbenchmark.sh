@@ -95,10 +95,10 @@ for client in $(seq ${c} ${lastclient}); do
         git add *
         git commit -am "${testname} $(date)"
       fi
+      echo "Test complete for ${cprefix}${client} to ${sprefix}${server}..."
     else
       echo "Skipping test against self (${cprefix}${client} to ${sprefix}${server})..."
     fi
-    echo "Test complete for ${cprefix}${client} to ${sprefix}${server}..."
     server=$[$server+1]
   done
   echo "All tests complete from ${cprefix}${client}..."
