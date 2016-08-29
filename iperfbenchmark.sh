@@ -8,6 +8,8 @@ repopath=/path/to/git/repo/for/results/output
 PATH=$PATH:/root/bin
 # How many times to run each test
 iterations=1
+# Whether to run the test in bidirectional mode. If your servers and clients lists overlap, then you might want to set this to false.
+bidirectional=true
 
 # Starting host numeration for clients (c) and servers (s)
 c=0
@@ -49,7 +51,8 @@ for server in $(seq ${s} ${lastserver}); do
         ssh root@${cprefix}${client} "pkill -9 iperf; pkill -9 iperf3; /usr/bin/iperf3 -s -D"
 
         # Initiate workload
-        cmd="${workload} && ${workload} -R"
+        cmd="${workload}"
+        if [ ${bidirectional} ]; then cmd="${cmd} && ${workload} -R"; fi
         ssh -t root@${sprefix}${server} "$cmd" | tee -a ${testname}.results
 
         i=$[$i+1]
