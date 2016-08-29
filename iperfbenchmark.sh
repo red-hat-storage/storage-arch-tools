@@ -46,6 +46,7 @@ lastclient=$(echo "$c+$numclients-1" | bc)
 
 # For each client system
 for client in $(seq ${c} ${lastclient}); do
+  echo "Initiating tests from ${cprefix}${client}..."
   # Run one-to-one full mesh tests with servers
   for server in $(seq ${s} ${lastserver}); do
     # But we don't want to test against ourself
@@ -56,35 +57,47 @@ for client in $(seq ${c} ${lastclient}); do
       tool=`echo ${testname} | awk -F-- '{print $1}'`
       test=`echo ${testname} | awk -F-- '{print $2}'`
       testconfig=`echo ${testname} | awk -F-- '{print $3}'`
+      gitrepo="${tool}/${test}/${testconfig}"
       workload="${iperf3} -c ${sprefix}${server} -i ${ipreport} -t ${ipruntime} -P ${ipthreads}"
 
+      echo "Changing to ${repopath} working directory..."
       cd ${repopath}
-      git checkout ${tool}/${test}/${testconfig} 2>/dev/null || git checkout -b ${tool}/${test}/${testconfig} master
+      echo "Checking out git repository ${gitrepo}..."
+      git checkout ${gitrepo} 2>/dev/null || git checkout -b ${gitrepo} master
 
-      i=0
-      while [ $i -lt ${iterations} ]; do
+      i=1
+      while [ $i -le ${iterations} ]; do
         # Ensure iperf3 server process is runnning
+        echo "Starting iperf3 server daemon on ${sprefix}${server}..."
         ssh root@${sprefix}${server} "pkill -9 iperf; pkill -9 iperf3; /usr/bin/iperf3 -s -D"
 
         # Initiate workload
         cmd="${workload}"
         if [ "${bidirectional}" = true ]; then cmd="${cmd} && ${workload} -R"; fi
-        ssh -t root@${cprefix}${client} "${cmd}" | tee -a ${testname}-$(date +%F-%H-%M-%S).results
+        echo "Client workload is '${cmd}'"
+        echo "Initiating workload iteration ${i} of ${iterations}..."
+        ssh -t root@${cprefix}${client} "${cmd}" | tee -a ${testname}-$(date +%F-%H-%M-%S).results >/dev/null 2>&1
 
         i=$[$i+1]
       done
 
+      "Adding and committing results file to git repo..."
       git add *
       git commit -am "${testname} $(date)"
     else
-      echo "Skipping test against self..."
+      echo "Skipping test against self (${cprefix}${client} to ${sprefix}${server})..."
     fi
+    echo "Test complete for ${cprefix}${client} to ${sprefix}${server}..."
     server=$[$server+1]
   done
+  echo "All tests complete from ${cprefix}${client}..."
   client=$[$client+1]
 done
 
+echo "All iperf3 tests now complete! Cleaning up..."
+
 # Stop all iperf server processes
 for server in $(seq ${s} ${lastserver}); do
+  echo "Stopping all iperf3 server processes..."
   ssh root@${sprefix}${server} "pkill -9 iperf; pkill -9 iperf3"
 done
