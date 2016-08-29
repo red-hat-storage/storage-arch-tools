@@ -53,7 +53,7 @@ for client in $(seq ${c} ${lastclient}); do
     if [ "${sprefix}${server}" != "${cprefix}${client}" ]; then
       echo "Beginning test from ${cprefix}${client} to ${sprefix}${server}..."
       # We use a test naming convention with "sections" broken by -- which we parse below into our git branches
-      testname="iperf--bidirectional-n${server}-c${client}--1-10gbe-10-min-10-proc"
+      testname="iperf--bidirectional-n${client}-c${server}--1-10gbe-10-min-10-proc"
       tool=`echo ${testname} | awk -F-- '{print $1}'`
       test=`echo ${testname} | awk -F-- '{print $2}'`
       testconfig=`echo ${testname} | awk -F-- '{print $3}'`
