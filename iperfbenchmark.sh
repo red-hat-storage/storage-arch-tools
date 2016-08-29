@@ -69,7 +69,7 @@ for client in $(seq ${c} ${lastclient}); do
       while [ $i -le ${iterations} ]; do
         # Ensure iperf3 server process is runnning
         echo "Starting iperf3 server daemon on ${sprefix}${server}..."
-        ssh root@${sprefix}${server} "pkill -9 iperf; pkill -9 iperf3; /usr/bin/iperf3 -s -D"
+        ssh root@${sprefix}${server} "pkill -x -9 iperf; pkill -x -9 iperf3; ${iperf3} -s -D"
 
         # Initiate workload
         cmd="${workload}"
@@ -99,5 +99,5 @@ echo "All iperf3 tests now complete! Cleaning up..."
 # Stop all iperf server processes
 for server in $(seq ${s} ${lastserver}); do
   echo "Stopping all iperf3 server processes..."
-  ssh root@${sprefix}${server} "pkill -9 iperf; pkill -9 iperf3"
+  ssh root@${sprefix}${server} "pkill -x -9 iperf; pkill -x -9 iperf3"
 done
