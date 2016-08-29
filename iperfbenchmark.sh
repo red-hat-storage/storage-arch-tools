@@ -31,30 +31,33 @@ lastserver=$(echo "$s+$numservers-1" | bc)
 for server in $(seq ${s} ${lastserver}); do
   # Run one-to-one full mesh tests
   for client in $(seq ${c} ${lastclient}); do
-    # We use a test naming convention with "sections" broken by -- which we parse below into our git branches
-    testname=iperf--bidirectional-n${server}-c${client}--1-10gbe-10-min-10-proc
-    tool=`echo ${testname} | awk -F-- '{print $1}'`
-    test=`echo ${testname} | awk -F-- '{print $2}'`
-    testconfig=`echo ${testname} | awk -F-- '{print $3}'`
-    workload="/usr/bin/iperf3 -c ${cprefix}${client} -i 60 -t 600 -P 10"
+    # We don't want to test against ourself
+    if [ "${cprefix}${client}" != "${sprefix}${server}" ]; then
+      # We use a test naming convention with "sections" broken by -- which we parse below into our git branches
+      testname=iperf--bidirectional-n${server}-c${client}--1-10gbe-10-min-10-proc
+      tool=`echo ${testname} | awk -F-- '{print $1}'`
+      test=`echo ${testname} | awk -F-- '{print $2}'`
+      testconfig=`echo ${testname} | awk -F-- '{print $3}'`
+      workload="/usr/bin/iperf3 -c ${cprefix}${client} -i 60 -t 600 -P 10"
 
-    cd ${repopath}
-    git checkout ${tool}/${test}/${testconfig} 2>/dev/null || git checkout -b ${tool}/${test}/${testconfig} master
+      cd ${repopath}
+      git checkout ${tool}/${test}/${testconfig} 2>/dev/null || git checkout -b ${tool}/${test}/${testconfig} master
 
-    i=0
-    while [ $i -lt ${iterations} ]; do
-      # Ensure iperf3 server process is runnning
-      ssh root@${cprefix}${client} "pkill -9 iperf; pkill -9 iperf3; /usr/bin/iperf3 -s -D"
+      i=0
+      while [ $i -lt ${iterations} ]; do
+        # Ensure iperf3 server process is runnning
+        ssh root@${cprefix}${client} "pkill -9 iperf; pkill -9 iperf3; /usr/bin/iperf3 -s -D"
 
-      # Initiate workload
-      cmd="${workload} && ${workload} -R"
-      ssh -t root@${sprefix}${server} "$cmd" | tee -a ${testname}.results
+        # Initiate workload
+        cmd="${workload} && ${workload} -R"
+        ssh -t root@${sprefix}${server} "$cmd" | tee -a ${testname}.results
 
-      i=$[$i+1]
-    done
+        i=$[$i+1]
+      done
 
-    git add *
-    git commit -am "${testname} `date`"
+      git add *
+      git commit -am "${testname} `date`"
+    fi
     client=$[$client+1]
   done
   server=$[$server+1]
