@@ -78,7 +78,7 @@ for client in $(seq ${c} ${lastclient}); do
         echo "Client workload is '${cmd}'"
         echo "Initiating workload iteration ${i} of ${iterations}..."
         echo "  Iteration runtime will be ${ipruntime} seconds, during which there will be no console output."
-        echo "  See ${resultsfile} for test output."
+        echo "  See ${repopath}/${resultsfile} for test output."
         ssh -t root@${cprefix}${client} "${cmd}" | tee -a ${resultsfile} >/dev/null 2>&1
 
         i=$[$i+1]
