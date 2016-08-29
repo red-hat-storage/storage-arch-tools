@@ -90,7 +90,7 @@ for client in $(seq ${c} ${lastclient}); do
         i=$[$i+1]
       done
 
-      if [ $gitabort -ne 1 ]; then
+      if [ "$gitabort" -ne 1 ]; then
         "Adding and committing results file to git repo..."
         git add *
         git commit -am "${testname} $(date)"
