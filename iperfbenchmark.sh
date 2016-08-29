@@ -2,11 +2,21 @@
 
 # Passwordless ssh to all servers and clients is required
 
+# iperf3 command setup
+# Location of the iperf3 binary
+iperf3="/usr/bin/iperf3"
+# How often to report in seconds
+ipreport=60
+# How long to run the test in seconds
+ipruntime=600
+# How many client threads to run
+ipthreads=10
+
 # We automatically store our outputs in git repo branches. The repo should already exist at the below path.
-repopath=/path/to/git/repo/for/results/output
+repopath="/path/to/git/repo/for/results/output"
 
 # We typically keep benchmark binaries in /root/bin
-PATH=$PATH:/root/bin
+PATH="$PATH:/root/bin"
 
 # How many times to run each test
 iterations=1
@@ -42,11 +52,11 @@ for client in $(seq ${c} ${lastclient}); do
     if [ "${sprefix}${server}" != "${cprefix}${client}" ]; then
       echo "Beginning test from ${cprefix}${client} to ${sprefix}${server}..."
       # We use a test naming convention with "sections" broken by -- which we parse below into our git branches
-      testname=iperf--bidirectional-n${server}-c${client}--1-10gbe-10-min-10-proc
+      testname="iperf--bidirectional-n${server}-c${client}--1-10gbe-10-min-10-proc"
       tool=`echo ${testname} | awk -F-- '{print $1}'`
       test=`echo ${testname} | awk -F-- '{print $2}'`
       testconfig=`echo ${testname} | awk -F-- '{print $3}'`
-      workload="/usr/bin/iperf3 -c ${sprefix}${server} -i 60 -t 600 -P 10"
+      workload="${iperf3} -c ${sprefix}${server} -i ${ipreport} -t ${ipruntime} -P ${ipthreads}"
 
       cd ${repopath}
       git checkout ${tool}/${test}/${testconfig} 2>/dev/null || git checkout -b ${tool}/${test}/${testconfig} master
@@ -59,7 +69,7 @@ for client in $(seq ${c} ${lastclient}); do
         # Initiate workload
         cmd="${workload}"
         if [ "${bidirectional}" = true ]; then cmd="${cmd} && ${workload} -R"; fi
-        ssh -t root@${cprefix}${client} "$cmd" | tee -a ${testname}-$(date +%F-%H-%M-%S).results
+        ssh -t root@${cprefix}${client} "${cmd}" | tee -a ${testname}-$(date +%F-%H-%M-%S).results
 
         i=$[$i+1]
       done
