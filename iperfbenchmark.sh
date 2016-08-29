@@ -13,13 +13,18 @@ iterations=1
 c=0
 s=0
 
+# Hostname prefixes
 cprefix="client"
-numclients=12
-lastclient=$(echo "$c+$numclients-1" | bc)
-
 sprefix="server"
+
+# Total numbers of clients and servers
+numclients=12
 numservers=6
+
+# Calculation of last client and server host numbers. This assumes integer enumeration of hosts (ie client{0..11}).
+lastclient=$(echo "$c+$numclients-1" | bc)
 lastserver=$(echo "$s+$numservers-1" | bc)
+
 
 # In this test, we have 12 client nodes named client0 through client11
 for client in $(seq ${c} ${lastclient}); do
