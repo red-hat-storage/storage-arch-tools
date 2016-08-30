@@ -63,7 +63,7 @@ for client in $(seq ${c} ${lastclient}); do
       echo "Changing to ${repopath} working directory..."
       cd ${repopath}
       if [ $? -ne 0 ]; then
-        gitabort=1
+        gitabort=true
         echo "Error changing to ${repopath}; aborting git checkout but continuing with tests..."
         echo "Results files will be placed in $PWD..."
       else
@@ -90,7 +90,7 @@ for client in $(seq ${c} ${lastclient}); do
         i=$[$i+1]
       done
 
-      if [ "$gitabort" -ne 1 ]; then
+      if [ "${gitabort}" != true ]; then
         "Adding and committing results file to git repo..."
         git add *
         git commit -am "${testname} $(date)"
