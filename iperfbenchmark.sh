@@ -91,7 +91,7 @@ for client in $(seq ${c} ${lastclient}); do
       done
 
       if [ "${gitabort}" != true ]; then
-        "Adding and committing results file to git repo..."
+        echo "Adding and committing results file to git repo..."
         git add *
         git commit -am "${testname} $(date)"
       fi
