@@ -58,6 +58,10 @@ testconfig=`echo ${testname} | awk -F-- '{print $3}'`
 # This should be under the mount point of the tested filesystem
 iopath="/rhgs/client/rep2/iozone"
 
+# Ensure iopath exists
+echo "Creating client IO path $iopath..."
+ssh root@${clients[0]} "mkdir -p $iopath"
+
 # Path to the clusterfile to be passed to iozone
 clusterfile="/tmp/${testname}.$(date +%F-%H-%M-%S).iozone.conf"
 
