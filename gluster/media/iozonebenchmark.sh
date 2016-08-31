@@ -64,7 +64,8 @@ echo "Creating client IO path $iopath..."
 ssh root@${clients[0]} "mkdir -p $iopath"
 
 # Path to the clusterfile to be passed to iozone
-clusterfile="/tmp/${testname}.$(date +%F-%H-%M-%S).iozone.conf"
+namedate="${testname}-$(date +%F-%H-%M-%S)"
+clusterfile="/tmp/${namedate}.iozone.conf"
 
 # Initialize the clusterfile
 echo "Initializing cluster file $clusterfile..."
@@ -112,9 +113,9 @@ fi
 ##########
 # Run the workload iterations
 echo "Initiating $iterations test iterations..."
+resultsfile="${namedate}.results"
 i=1
 while [ $i -le ${iterations} ]; do
-  resultsfile="${testname}-$(date +%F-%H-%M-%S).results"
   echo "Iteration $i running; Output to ${resultsfile}..."
   cmd="${workload}"
   eval ${cmd} | tee -a ${resultsfile}
