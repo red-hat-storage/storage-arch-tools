@@ -1,5 +1,6 @@
 #!/bin/bash
-PATH=$PATH:/root/bin
+export PATH=$PATH:/root/bin
+export RSH="ssh"
 
 # Enable results output to git (boolean true/false)
 gitenable=false
