@@ -15,6 +15,14 @@ repopath=/root/git/benchmark-gluster-smci-standard
 # iozone command path
 iozone=/root/bin/iozone
 
+#!!FIXME
+# This is a client-based script and doesn't generally require
+# specific knowledge of the Gluster server-side layout. However,
+# we need to drop caches on all server nodes between runs, so 
+# we need to build a list of involved servers, preferably
+# without having to manually enumerate them in this script.
+servers=(rhosd{0..5})
+
 
 # Passwordless ssh to all client nodes is required
 clients=(rhclient{0..11})
@@ -137,11 +145,23 @@ done
 
 
 # Command to drop disk caches
-dropcaches='echo 3 > /proc/sys/vm/drop_caches'
+dropcachescmd='echo 3 > /proc/sys/vm/drop_caches'
+
+# Function to drop caches on all clients and servers
+function _dropcaches {
+  for client in $(echo ${clientlist[*]}); do
+    ssh root@${client} "eval $dropcachescmd"
+  done
+  for server in $(echo ${servers[*]}); do
+    ssh root@${server} "eval $dropcachescmd"
+  done
+}
 
 # Base iozone command string and complete workload
 iozonecmd="$iozone -t $totalworkers -s $filesize -r $recordsize -+m $clusterfile -c -e -w -+z -+n"
-workload='eval $dropcaches && $iozonecmd -i 0 && eval $dropcaches && $iozonecmd -i 1' 
+#workload='eval $dropcachescmd && $iozonecmd -i 0 && eval $dropcachescmd && $iozonecmd -i 1' 
+workload='_dropcaches && $iozonecmd -i 0 && _dropcaches && $iozonecmd -i 1' 
+
 # Checkout the git branch for the results output
 if [ "$gitenable" = true ]; then
   # Branch name for git commit
