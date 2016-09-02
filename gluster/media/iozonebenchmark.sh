@@ -2,8 +2,12 @@
 export PATH=$PATH:/root/bin
 export RSH="ssh"
 
-# Enable results output to git (boolean true/false)
-gitenable=false
+function _usage {
+  cat <<END
+Insert usage help...
+END
+}
+
 
 # Path to the local git repo to use
 repopath=/root/git/benchmark-gluster-smci-standard
@@ -11,23 +15,75 @@ repopath=/root/git/benchmark-gluster-smci-standard
 # iozone command path
 iozone=/root/bin/iozone
 
+
 # Passwordless ssh to all client nodes is required
 clients=(rhclient{0..11})
+# Set default options below. These can be overridden with command flags
+# Enable results output to git (boolean true/false)
+gitenable=false
 
 # Number of clients to test from
 # Our standards are 1, 6, and 12
-numclients=6
+numclients=12
 
 # Number of worker threads per client
-# Our standards are 1 and 4
+# Our standards are 1, 2, 4, and 8
 numworkers=4
-totalworkers=$(echo "${numworkers}*${numclients}" | bc)
 
 # File size
 # Our standard test file sizes are:
 # 128m (medium), 4g (large), 128g (xlarge), 256g (jumbo1), 512g (jumbo2)
 filesize="4g"
 
+# Transaction record size
+recordsize="4m"
+
+# Number of test iterations to run
+iterations=10
+
+# Capture and act on command flags
+while getopts :gc:w:f:r:i:h; do
+  case ${opt} in
+    g)
+      gitenable=true
+      ;;
+    c)
+      numclients=${OPTARG}
+      ;;
+    w)
+      numworkers=${OPTARG}
+      ;;
+    f)
+      filesize="${OPTARG}"
+      ;;
+    r)
+      recordsize="${OPTARG}"
+      ;;
+    i)
+      iterations=${OPTARG}
+      ;;
+    h)
+      _usage
+      exit 1
+      ;;
+    \?)
+      echo "ERROR: Invalid option -${OPTARG}" >&2
+      _usage
+      exit 1
+      ;;
+    :)
+      echo "ERROR: Option -${OPTARG} requires an argument." >&2
+      _usage
+      exit 1
+      ;;
+  esac
+done
+
+
+# Calculate total workers across all clients
+totalworkers=$(echo "${numworkers}*${numclients}" | bc)
+
+# Set filesize naming convention
 if [ "$filesize" = "128m" ]; then
   sizeword="medium"
 elif [ "$filesize" = "4g" ]; then
@@ -41,12 +97,6 @@ elif [ "$filesize" = "512" ]; then
 else
   sizeword="$filesize"
 fi
-
-# Transaction record size
-recordsize="4m"
-
-# Number of test iterations to run
-iterations=10
 
 # The testname text should be modified as needed
 testname="iozone--${sizeword}-file-rw--mag-raid6-rep2-2-node-${numclients}-client-${totalworkers}-worker"
