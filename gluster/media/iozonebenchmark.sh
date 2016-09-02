@@ -42,7 +42,7 @@ recordsize="4m"
 iterations=10
 
 # Capture and act on command flags
-while getopts :gc:w:f:r:i:h; do
+while getopts ":gc:w:f:r:i:h" opt; do
   case ${opt} in
     g)
       gitenable=true
