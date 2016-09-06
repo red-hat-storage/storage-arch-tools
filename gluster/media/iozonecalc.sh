@@ -13,6 +13,7 @@ function calc() {
   listvals+=("$avg")
 }
 
+echo ""
 
 label="Tot Write Throughput"
 iterations=($(grep Children $1 | grep writers | awk -F= '{print $2}' | awk '{print $1}'))
@@ -30,8 +31,11 @@ label="Avg Write Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 writers | grep 'Avg throughput' | awk -F= '{print $2}' | awk '{print $1}'))
 calc iterations[@] "$label"
 
-echo "spreadsheet: ${listvals[*]}" | sed s/\ /\\t/g
+echo "spreadsheet:
+${listvals[*]}" | sed s/\ /\\t/g
 listvals=()
+
+echo ""
 
 label="Tot Read Throughput"
 iterations=($(grep Children $1 | grep readers | awk -F= '{print $2}' | awk '{print $1}'))
@@ -49,4 +53,5 @@ label="Avg Read Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 readers | grep 'Avg throughput' | awk -F= '{print $2}' | awk '{print $1}'))
 calc iterations[@] "$label"
 
-echo "spreadsheet: ${listvals[*]}" | sed s/\ /\\t/g
+echo "spreadsheet:
+${listvals[*]}" | sed s/\ /\\t/g
