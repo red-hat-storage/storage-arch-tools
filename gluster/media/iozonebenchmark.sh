@@ -145,7 +145,7 @@ done
 
 
 # Command to drop disk caches
-dropcachescmd='echo 3 > /proc/sys/vm/drop_caches'
+dropcachescmd='sync ; echo 3 > /proc/sys/vm/drop_caches'
 
 # Function to drop caches on all clients and servers
 function _dropcaches {
