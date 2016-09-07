@@ -123,6 +123,16 @@ ssh root@${clients[0]} "mkdir -p $iopath"
 # Set namedate variable
 namedate="${testname}-$(date +%F-%H-%M-%S)"
 
+# Populate the client list
+echo "Populating client list..."
+i=0
+while [ $i -lt $numclients ]; do
+  clientlist[$i]=${clients[$i]}
+  i=$[$i+1]
+done
+
+hostset="$(echo ${clientlist[@]} | sed s/\ /,/g)"
+
 
 # Command to drop disk caches
 dropcachescmd='sync ; echo 3 > /proc/sys/vm/drop_caches'
@@ -138,7 +148,7 @@ function _dropcaches {
 }
 
 # Base smallfile command string and complete workload
-smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $clientlist --prefix $namedate --stonewall Y"
+smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $namedate --stonewall Y"
 workload='_dropcaches && $smallfilecmd -i 0 && _dropcaches && $smallfilecmd -i 1' 
 
 # Checkout the git branch for the results output
