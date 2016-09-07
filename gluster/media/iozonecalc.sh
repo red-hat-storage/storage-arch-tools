@@ -14,7 +14,9 @@ function _calc() {
   echo "$2 = $avg (δ $sd)"
   #echo "$(echo ${i[@]} | sed s/\ /\\t/g)"
   if [ "$3" == "true" ]; then
-    listvals+=("$(echo "scale=4; $sd / $avg" | bc)")
+    cv=$(echo "scale=4; $sd / $avg" | bc)
+    cvpct="$(printf %.2f $(echo "scale=2; $cv*100" | bc))%"
+    listvals+=("$cvpct")
   fi
   listvals+=("$avg")
 }
