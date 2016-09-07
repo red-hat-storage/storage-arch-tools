@@ -5,31 +5,34 @@ file=$1
 
 listvals=()
 
-function calc() {
+function _calc() {
   declare -a i=("${!1}")
   total=$(echo ${i[@]} | sed s/\ /+/g | bc)
-  avg=$(echo "scale=2; $total / ${#i[@]}" | bc)
-  echo "$2 = $avg"
+  count=${#i[@]}
+  avg=$(echo "scale=2; $total / $count" | bc)
+  sd=$(echo ${i[@]} | awk -v M=$count '{x+=$0;y+=$0^2}END{print sqrt(y/M-(x/M)^2)}')
+  echo "$2 = $avg (δ $sd)"
   listvals+=("$avg")
 }
+
 
 echo ""
 
 label="Tot Write Throughput"
 iterations=($(grep Children $1 | grep writers | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 label="Min Write Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 writers | grep 'Min throughput' | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 label="Max Write Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 writers | grep 'Max throughput' | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 label="Avg Write Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 writers | grep 'Avg throughput' | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 echo "spreadsheet:
 ${listvals[*]}" | sed s/\ /\\t/g
@@ -39,19 +42,19 @@ echo ""
 
 label="Tot Read Throughput"
 iterations=($(grep Children $1 | grep readers | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 label="Min Read Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 readers | grep 'Min throughput' | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 label="Max Read Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 readers | grep 'Max throughput' | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 label="Avg Read Throughput"
 iterations=($(grep -A4 Children $1 | grep -A4 readers | grep 'Avg throughput' | awk -F= '{print $2}' | awk '{print $1}'))
-calc iterations[@] "$label"
+_calc iterations[@] "$label"
 
 echo "spreadsheet:
 ${listvals[*]}" | sed s/\ /\\t/g
