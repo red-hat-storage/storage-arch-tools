@@ -43,7 +43,7 @@ numworkers=4
 # 4096 (small), 32 (tiny)
 filesize=4096
 
-numfiles=200
+numfiles=2048
 
 # Transaction record size
 #recordsize="4m"
