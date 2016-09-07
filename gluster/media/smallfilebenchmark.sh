@@ -121,7 +121,9 @@ echo "Creating client IO path $iopath..."
 ssh root@${clients[0]} "mkdir -p $iopath"
 
 # Set namedate variable
-namedate="${testname}-$(date +%F-%H-%M-%S)"
+timestamp="$(date +%F-%H-%M-%S)"
+namedate="${testname}-${timestamp}"
+
 
 # Populate the client list
 echo "Populating client list..."
@@ -148,8 +150,8 @@ function _dropcaches {
 }
 
 # Base smallfile command string and complete workload
-smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $namedate --stonewall Y"
-workload='_dropcaches && $smallfilecmd -i 0 && _dropcaches && $smallfilecmd -i 1' 
+smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $timestamp --stonewall Y"
+workload='_dropcaches && $smallfilecmd --operation create && _dropcaches && $smallfilecmd --operation read' 
 
 # Checkout the git branch for the results output
 if [ "$gitenable" = true ]; then
