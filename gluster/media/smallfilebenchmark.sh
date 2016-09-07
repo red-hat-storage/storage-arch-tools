@@ -181,6 +181,10 @@ while [ $i -le ${iterations} ]; do
   cmd="${workload}"
   eval ${cmd} | tee -a ${resultsfile}
   #echo ${cmd}
+  # Clean up the files
+  echo "Cleaning up the files..."
+  smallfilecleanup="$smallfile --top $iopath --prefix $timestamp --operation cleanup"
+  eval $smallfilecleanup
   i=$[$i+1]
 done
 echo "All test iterations complete!"
