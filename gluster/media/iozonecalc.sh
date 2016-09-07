@@ -10,10 +10,11 @@ function _calc() {
   total=$(echo ${i[@]} | sed s/\ /+/g | bc)
   count=${#i[@]}
   avg=$(echo "scale=2; $total / $count" | bc)
-  sd=$(echo ${i[@]} | awk -v M=$count '{x+=$0;y+=$0^2}END{print sqrt(y/M-(x/M)^2)}')
+  sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};print sqrt(sum/C)}')
   echo "$2 = $avg (δ $sd)"
+  #echo "$(echo ${i[@]} | sed s/\ /\\t/g)"
   if [ "$3" == "true" ]; then
-    listvals+=("$(echo "scale=2; $sd / $avg" | bc)")
+    listvals+=("$(echo "scale=4; $sd / $avg" | bc)")
   fi
   listvals+=("$avg")
 }
