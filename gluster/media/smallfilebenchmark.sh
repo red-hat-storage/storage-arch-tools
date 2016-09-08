@@ -183,7 +183,7 @@ while [ $i -le ${iterations} ]; do
   #echo ${cmd}
   # Clean up the files
   echo "Cleaning up the files..."
-  smallfilecleanup="$smallfile --top $iopath --prefix $timestamp --operation cleanup"
+  smallfilecleanup="$smallfilecmd --operation cleanup" >/dev/null 2>&1
   eval $smallfilecleanup
   i=$[$i+1]
 done
