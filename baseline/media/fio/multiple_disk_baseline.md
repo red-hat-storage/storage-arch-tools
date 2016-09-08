@@ -1,6 +1,8 @@
 ## Initial Source
 "Content of this file has been taken from [Karan's Blog](http://www.ksingh.co.in/blog/2016/05/27/fio-tip-use-genfio-to-quickly-generate-fio-job-files/) "
 
+## Instruction for multi disk benchmarking
+
 FIO provides a utility called as ``genfio`` . As the name suggest it a tool that generates FIO job file based on arguments you provides to it. 
 
 Recently i have been try to benchmarking my server containing 35 disks such that each operation should run in parallel on all disk's and i should get aggregated results for IOPS and Bandwidth. So i used genfio to generate FIO job file and then run fio command line  using the job file 
