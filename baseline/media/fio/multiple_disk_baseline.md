@@ -1,5 +1,7 @@
+## Initial Source
+"Content of this file has been taken from [Karan's Blog](http://www.ksingh.co.in/blog/2016/05/27/fio-tip-use-genfio-to-quickly-generate-fio-job-files/) "
 
-[FIO](www.google.com) is one of the most popular benchmarking tool out there and its my favourite too. It's a feature rich tool and provides pretty useful supporting utilities. One of the utilities it provides is ``genfio`` . As the name suggest it a tool that generates FIO job file based on arguments you provides to it. 
+FIO provides a utility called as ``genfio`` . As the name suggest it a tool that generates FIO job file based on arguments you provides to it. 
 
 Recently i have been try to benchmarking my server containing 35 disks such that each operation should run in parallel on all disk's and i should get aggregated results for IOPS and Bandwidth. So i used genfio to generate FIO job file and then run fio command line  using the job file 
 
@@ -11,7 +13,7 @@ ls /dev/sd{b..z} /dev/sda{a..i}
 ```
 disk_list=/dev/sdaa,/dev/sdac,/dev/sdae,/dev/sdag,/dev/sdai,/dev/sdc,/dev/sde,/dev/sdg,/dev/sdi,/dev/sdk,/dev/sdm,/dev/sdo,/dev/sdq,/dev/sds,/dev/sdu,/dev/sdw,/dev/sdy,/dev/sdab,/dev/sdad,/dev/sdaf,/dev/sdah,/dev/sdb,/dev/sdd,/dev/sdf,/dev/sdh,/dev/sdj,/dev/sdl,/dev/sdn,/dev/sdp,/dev/sdr,/dev/sdt,/dev/sdv,/dev/sdx,/dev/sdz
 ```
-- So here is ``genfio`` command for exercising 34 disks in parallel with 4K write workload.  Execution of this command will generate  ``.fio`` job file
+- So here is ``genfio`` command for exercising 35 disks in parallel with 4K write workload.  Execution of this command will generate  ``.fio`` job file
 ```
  genfio -d $disk_list -b 4k -r 180 -p -m write
 ```
