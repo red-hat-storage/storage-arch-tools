@@ -183,8 +183,8 @@ while [ $i -le ${iterations} ]; do
   #echo ${cmd}
   # Clean up the files
   echo "Cleaning up the files..."
-  smallfilecleanup="$smallfilecmd --operation cleanup" >/dev/null 2>&1
-  eval $smallfilecleanup
+  smallfilecleanup="$smallfilecmd --operation cleanup"
+  eval $smallfilecleanup >/dev/null 2>&1
   i=$[$i+1]
 done
 echo "All test iterations complete!"
