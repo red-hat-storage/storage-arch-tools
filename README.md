@@ -1,9 +1,9 @@
 # Introduction
 
-## Storage Architectures Team Benchmarking Process
+# Storage Architectures Team Benchmarking Process
+![SAT benchmarking process](SAT_benchmarking_Process.png)
 
-## Benchmarking tools
-
+# Benchmarking tools
 - Baseline
   - Media
     - FIO
