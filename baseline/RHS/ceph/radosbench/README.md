@@ -66,3 +66,5 @@ Block_Size(bytes)
 4096
 #
 ```
+## Additional Information
+If you have created multiple YML files say for 1 , 4 , 8 and 12 client hosts , you can automate the process by using a wrapper script such as ``start_ec_4_2_test.sh``. You should modify this script as per your needs.
