@@ -1,9 +1,8 @@
 # Introduction
 
 The stdfiobench CBT module is the simplest way to benchmark disk using FIO. 
-This module does not uses Ceph or its components, so it can be used for non Ceph block device benchmarking. 
-There are scenarios such as measuring baseline or measuring Ceph block device vs. other block device performance, you can use this module in such cases. 
-
+This module does not require Ceph or its components, so it can also be used for other benchmarking needs. 
+ 
 - Currently this module haven't got merged with upstream CBT, so you need to use [Karan's fork of CBT](https://github.com/ksingh7/cbt/tree/ksingh-stdfiobench-parser) and switch branches as shown below
 ```
 git clone https://github.com/ksingh7/cbt.git
@@ -15,8 +14,7 @@ git checkout ksingh-stdfiobench-parser
 
 ## How to use this module
 
-If you are familiar with CBT and its YAML configuration files, then using stdfiobench is pretty straightforward. Just call the module from
-YAML file and provide values to its arguments as shown below.
+If you are familiar with CBT and its YAML configuration files, then using stdfiobench is pretty straightforward. Just call the module using YAML file and provide values to its arguments as shown below.
 
 **Step:1  Design your test case in CBT YAML file**
 
@@ -59,7 +57,7 @@ Wait for CBT to finish your tests and collect the results under test1_results ar
 
 stdfiobench module comes with a parser located at  ``tools/cbt_fio_terse_parser.py`` , which currently supports parsing FIO output generated **only in 'terse' format.**
 
-If you are using output format other then terse, then you need to parse output in your own ways ( looking forward for your contribution ) 
+If you are using output format other then terse, then you need to parse output in your own ways ( looking forward for your contribution )
 
 To parse your CBT results which are in 'terse' format , execute the following command
 ```
