@@ -1,5 +1,5 @@
 # Gluster Deployment and Cleanup Automation
-The gdeploy tool utilizes ansible to automate the configuration of servers and Gluster volumes, as well as connectivity of client systems. It can also be used to reset the environment for a rebuild, a great benefit to the high degree of changes during a benchmark cycle.
+The `gdeploy` tool utilizes ansible to automate the configuration of servers and Gluster volumes, as well as connectivity of client systems. It can also be used to reset the environment for a rebuild, a great benefit to the high degree of changes during a benchmark cycle.
 
 ## Build config files
 The naming convention attempts to be clear as to what type of volume is being created. The .conf file should be edited as appropriate for server and client hardware specifics and hostnames.
