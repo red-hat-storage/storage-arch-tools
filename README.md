@@ -10,10 +10,11 @@
     - IOzone
   - Network
     - iperf
-  - Ceph
-    - Radosbench
-  - Gluster
-    - IOzone
+  - Red Hat Storage
+    - Ceph
+      - Radosbench
+    - Gluster
+      - IOzone
 
 - Benchmarking
   - Ceph
