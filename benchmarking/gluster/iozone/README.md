@@ -1,4 +1,4 @@
-# Medium-to-Large File Benchmarking with
+# Medium-to-Large File Benchmarking
 
 ## Filesystem throughput with iozone
 Test I/O throughput for complete Gluster storage stack -- disk > RAID > LVM > filesystem > Gluster volume. Compare against manufacturers’ specs for disk hardware and against like tests from different hardware and benchmark cycles.
