@@ -1,6 +1,6 @@
 # Introduction
 
-## Storage Architecture Team Benchmarking Process
+## Storage Architectures Team Benchmarking Process
 
 ## Benchmarking tools
 
