@@ -5,7 +5,7 @@ The gdeploy tool utilizes ansible to automate the configuration of servers and G
 The naming convention attempts to be clear as to what type of volume is being created. The .conf file should be edited as appropriate for server and client hardware specifics and hostnames.
 
 ## Reset config files
-A set of two config files can be used in sequence to reset an environment to a clean state. Run i`volume_reset.conf` followed by `backend_reset.conf`.
+A set of two config files can be used in sequence to reset an environment to a clean state. Run `volume_reset.conf` followed by `backend_reset.conf`.
 
 ## Usage
 ```bash
