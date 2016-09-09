@@ -1,4 +1,5 @@
 ## Requirements
+- Working Ceph cluster
 - CBT
 
 ## Erasure Coded Pools
