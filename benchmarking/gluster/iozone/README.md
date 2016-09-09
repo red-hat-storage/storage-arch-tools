@@ -54,7 +54,7 @@ Several variables need to be edited directly in the script based on the particul
 Additionally, the script has the capability to check out a git repository and automatically commit the results output files.
 
 ### Variables:
-* `repopath -- Local filesystem path to the git repo to use. This should already exist and be configured as a git repo.
+* `repopath` -- Local filesystem path to the git repo to use. This should already exist and be configured as a git repo.
 * `iozone` -- Local filesytsem path to the `iozone` command. This should be consistent across all test systems
 * `servers` -- Array variable holding the hostnames or IPs of all server nodes
 * `clients` -- Array variable holding the hostnames or IPs of all client nodes
