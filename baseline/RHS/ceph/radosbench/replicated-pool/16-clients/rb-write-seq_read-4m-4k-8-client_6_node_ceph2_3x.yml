@@ -1,0 +1,32 @@
+cluster:
+  user: "root"
+  head: "client1"
+  clients: ["client1", "client2", "client3", "client4", "client5", "client6", "client7", "client8"]
+  osds: ["ceph-osd1", "ceph-osd2", "ceph-osd3", "ceph-osd4", "ceph-osd5", "ceph-osd6",]
+  mons:
+    ceph-mon1:
+      a: "10.5.13.143:6789"
+  iterations: 1
+  rebuild_every_test: False
+  use_existing: True
+  clusterid: "ceph"
+  tmp_dir: "/tmp/cbt"
+  pool_profiles:
+    replicated:
+      pg_size: 65536
+      pgp_size: 65536
+      replication: 3
+benchmarks:
+  radosbench:
+    op_size: [ 4194304, 4096 ]
+    write_only: False 
+    time: 300
+    concurrent_ops: [ 128 ]
+    concurrent_procs: 1
+    use_existing: True
+    pool_profile: "replicated"
+    pool_per_proc: False
+    target_pool: "rados-bench-cbt-3x"
+    readmode: "seq"
+    osd_ra: [131072]
+
