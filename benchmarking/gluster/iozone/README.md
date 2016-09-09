@@ -70,5 +70,32 @@ Additionally, the script has the capability to check out a git repository and au
 * `recordsize` -- Size for individual record transactions, formatted for the -r flag of the `iozone` command (flag: `-r <string>` ; default: 4m)
 * `iterations` -- Number of times to repeat the test (flag: `-i <integer>` ; default: 10)
 
+### Example
+Nested for loops allow many dimensions to be tested in sequence with one command string.
+```bash
+for f in 128m 4g ; do for c in 6 12; do for w in 1 2 4; do iozonebenchmark.sh -g -c $c -w $w -f $f -r 4m -i 10; done; done; done
+```
+
 ## Parsing results with the `iozonecalc.sh` script
 This script can be used to quickly average and display the iteration results. The script searches the results file for all write and read results, and then displays the averages for each result as well as the standard deviation. For simplicity of import into a spreadsheet, it also provides tab-separated output of the average results as well as the coefficient of variance from the total througput values.
+
+### Example
+```bash
+iozonecalc.sh iozone--large-file-rw--mag-raid6-rep2-2-node-12-client-nfs-12-worker-2016-09-06-11-17-30.results
+
+Tot Write Throughput = 1060309.77 (δ 13199.9)
+Min Write Throughput = 84981.70 (δ 4279.67)
+Max Write Throughput = 89577.96 (δ 2102.08)
+Avg Write Throughput = 88359.14 (δ 1099.99)
+spreadsheet:
+δ/µ	tot_write	min_write	max_write	avg_write
+1.24%	1060309.77	84981.70	89577.96	88359.14
+
+Tot Read Throughput = 1122065.83 (δ 5527.24)
+Min Read Throughput = 75668.29 (δ 3972.3)
+Max Read Throughput = 111405.01 (δ 5121.52)
+Avg Read Throughput = 93505.48 (δ 460.606)
+spreadsheet:
+δ/µ	tot_read	min_read	max_read	avg_read
+0.49%	1122065.83	75668.29	111405.01	93505.48
+```
