@@ -1,6 +1,6 @@
 # Introduction
 
-The stdfiobench CBT module is the simplest way to benchmark any block device using FIO. 
+The stdfiobench CBT module is the simplest way to benchmark disk using FIO. 
 This module does not uses Ceph or its components, so it can be used for non Ceph block device benchmarking. 
 There are scenarios such as measuring baseline or measuring Ceph block device vs. other block device performance, you can use this module in such cases. 
 
