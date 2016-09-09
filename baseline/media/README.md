@@ -16,9 +16,23 @@
 
 ## FIO
 Under FIO directory you will find different ways to trigger FIO
-- **Single Disk Baseline** : Used for single disk baseline.
-- **Multi Disk Baseline** : Used for multi disk parallel baseline.
--  **Call** ``stdfiobench`` **within CBT** :  Uses CBT as a wrapper for FIO, also comes with FIO parser script
+- **Single Disk Baseline** : 
+       - Used for single disk baseline
+       - Classic FIO command line with necessary options
+       - Manual result collection
+- **CBT** ``stdfiobench`` **Module** :  
+       - Used for single disk baseline, multi disk support yet to be added
+       - Uses CBT as a wrapper for FIO
+       - Can automate test runs for different block devices and patterns
+       - Comes with FIO output parser script for easy results collection
+       - Drops cache after every run
+       - Creates filesystem and mount disk before running test. Does not support raw block device currently (but not hard to do)
+       - Lot of configurable options 
+- **Multi Disk Baseline** : 
+       - Used for multi disk parallel baseline
+       - Requres ``genfio`` to generate miltiple FIO job files and then execute them in parallel
+       - Manual result collection
+
 
 ## IOzone
 
