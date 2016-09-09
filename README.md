@@ -1,7 +1,8 @@
-# Storage Architecture Team Benchmarking process
+# Introduction
 
+## Storage Architecture Team Benchmarking Process
 
-# Storage Architecture Team tools
+## Benchmarking tools
 
 - Baseline
   - Media
