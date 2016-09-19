@@ -8,6 +8,10 @@ rgw frontends = civetweb port=10.5.13.118:8080 num_threads=2048 request_timeout_
 rgw_override_bucket_index_max_shards = 128
 rgw_bucket_index_max_aio = 128
 rgw num rados handles = 64
+rgw cache lru size = 30000
+
+# RGW strip size, size in bytes , use it only if COSBench jobs from default strip size is failing
+rgw_obj_stripe_size = 33554432 
 
 # Enable logging
 debug rgw = 10
