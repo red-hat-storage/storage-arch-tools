@@ -9,7 +9,7 @@
 		- Gluster HCI on SuperMicro
 - After each test run, it's a good idea to drop system cache.
 ```
-# echo 3 > /proc/sys/vm/drop_caches
+# sync; echo 3 > /proc/sys/vm/drop_caches
 ```
 - Make sure you are benchmarking ``Direct IO`` , use appropriate flags for direct IO [ FIO : ``--direct = 1`` ]
 - Baselines are usually done on block devices, however you can also baseline filesystems based on your test case.
