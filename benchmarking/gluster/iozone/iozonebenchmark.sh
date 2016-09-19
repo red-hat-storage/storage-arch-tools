@@ -4,7 +4,32 @@ export RSH="ssh"
 
 function _usage {
   cat <<END
-Insert usage help...
+
+IOZone benchmark script for Red Hat Software-Defined Storage Architecture Team
+  Runs iterations of iozone with a standardized set of options and configurable
+  values to allow for running extensive loops of the script. Able to output 
+  benchmark results to git repositories.
+
+  Note: This thing makes a lot of assumptions. This help output doesn't cover
+        everything, so take a look at the script itself before diving too
+        deep into things.
+
+Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-r <size>] [-i <integer>]
+
+  -g : Enable output to git (edit the script file to define the git repo)
+
+  -c <integer> : Number of clients to run workloads
+
+  -w <integer> : Number of workers each client will run
+
+  -f <size> : Size (with k, m, g suffix) of files for test
+
+  -r <size> : Size (with k, m, g suffix) of transaction records
+
+  -i <integer> : Number of idendical test iterations to run
+
+Primary Author/Maintainer: Dustin Black <dustin@redhat.com>
+
 END
 }
 
@@ -21,11 +46,11 @@ iozone=/root/bin/iozone
 # we need to drop caches on all server nodes between runs, so 
 # we need to build a list of involved servers, preferably
 # without having to manually enumerate them in this script.
-servers=(rhosd{0..5})
+servers=(n{0..5})
 
 
 # Passwordless ssh to all client nodes is required
-clients=(rhclient{0..11})
+clients=(c{0..11})
 # Set default options below. These can be overridden with command flags
 # Enable results output to git (boolean true/false)
 gitenable=false
@@ -108,6 +133,7 @@ fi
 
 # The testname text should be modified as needed
 testname="iozone--${sizeword}-file-rw--mag-raid6-rep2-2-node-${numclients}-client-${totalworkers}-worker"
+#testname="iozone--${sizeword}-file-rw--mag-raid6-rep2-2-node-${numclients}-client-nfs-${totalworkers}-worker"
 
 tool=`echo ${testname} | awk -F-- '{print $1}'`
 test=`echo ${testname} | awk -F-- '{print $2}'`
@@ -116,6 +142,7 @@ testconfig=`echo ${testname} | awk -F-- '{print $3}'`
 # Path on the client nodes to which the I/O should be generated
 # This should be under the mount point of the tested filesystem
 iopath="/rhgs/client/rep2/iozone"
+#iopath="/rhgs/nfs-client/rep2/iozone"
 
 # Ensure iopath exists
 echo "Creating client IO path $iopath..."
