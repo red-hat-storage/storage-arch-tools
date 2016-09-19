@@ -1,5 +1,23 @@
 Ceph Rados Gateway Setup
 =======================
+- Ceph RGW tunable configuration parameters. 
+```
+# Number of RGW/Civetweb threads (increased parallellism)
+rgw frontends = civetweb port=10.5.13.118:8080 num_threads=2048 request_timeout_ms=99999
+# Bucket sharding
+rgw_override_bucket_index_max_shards = 128
+rgw_bucket_index_max_aio = 128
+rgw num rados handles = 64
+rgw cache lru size = 30000
+
+# RGW strip size, size in bytes , use it only if COSBench jobs from default strip size is failing
+rgw_obj_stripe_size = 33554432 
+
+# Enable logging
+debug rgw = 10
+debug civetweb = 10
+debug ms =1
+```
 - Create Ceph RGW user with S3 and Swift access
 ```
 radosgw-admin user create --uid='user1' --display-name='First User' --access-key='S3user1' --secret-key='S3user1key' --max-buckets=99999
@@ -90,8 +108,8 @@ easy_install collectd-haproxy ;  vim /etc/collectd.conf ;
 systemctl restart collectd ; systemctl status collectd
 ```
 
-Some useful commands
--------------------------------------------
+Useful commands
+====================
 
 ```
  swift  -A http://ceph-osd1:80/auth/1.0 -U user1:swift -K 'Swiftuser1key' list
