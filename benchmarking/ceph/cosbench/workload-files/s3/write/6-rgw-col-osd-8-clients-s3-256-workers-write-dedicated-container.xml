@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workload name="6-rgw-40Gbe-8-client-s3-256-workers-128M-write-cont-prefix" description="6-rgw-40Gbe-8-client-s3-256-workers-128M-write-cont-prefix" config="">
+    <workflow config="">
+
+<!-- ************************* Create Containers ********************************* -->      
+    <workstage name="init">
+      <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.140:80;retry=10"/>
+      <work type="init" workers="16" config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(1,80)" id="op1" />
+    </workstage>
+
+    <workstage name="init">
+      <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.140:80;retry=10"/>
+      <work type="init" workers="16" config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(1,80)" id="op2" />
+    </workstage>    
+    
+    <workstage name="init">
+      <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.141:80;retry=10"/>
+      <work type="init" workers="16" config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(1,80)" id="op3" />
+    </workstage>
+
+    <workstage name="init">
+      <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.142:80;retry=10"/>
+      <work type="init" workers="16" config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(1,80)" id="op4" />
+    </workstage>
+
+
+<!-- ************************* Write Test ********************************* -->
+
+        <workstage name="client-write-1m" closuredelay="0" config="">
+            <work name="client1-write-1m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(1,10);objects=r(1,500);sizes=c(1)MB" id="op1"/>
+            </work>
+            <work name="client2-write-1m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client2" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(11,20);objects=r(1,500);sizes=c(1)MB" id="op2"/>
+            </work>         
+            <work name="client3-write-1m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client3" config="">
+                
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(21,30);objects=r(1,500);sizes=c(1)MB" id="op3"/>
+            </work>
+            <work name="client4-write-1m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client4" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(31,40);objects=r(1,500);sizes=c(1)MB" id="op4"/>
+            </work>
+            <work name="client5-write-1m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client5" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(41,50);objects=r(1,500);sizes=c(1)MB" id="op5"/>
+            </work>
+            <work name="client6-write-1m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client6" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(51,60);objects=r(1,500);sizes=c(1)MB" id="op6"/>
+            </work>            
+            <work name="client7-write-1m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(61,63);objects=r(1,500);sizes=c(1)MB" id="op7"/>
+            </work>
+            <work name="client7-write-1m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(64,66);objects=r(1,500);sizes=c(1)MB" id="op8"/>
+            </work>         
+            <work name="client7-write-1m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(67,70);objects=r(1,500);sizes=c(1)MB" id="op9"/>
+            </work>
+            <work name="client8-write-1m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(71,73);objects=r(1,500);sizes=c(1)MB" id="op10"/>
+            </work>
+            <work name="client8-write-1m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(74,76);objects=r(1,500);sizes=c(1)MB" id="op11"/>
+            </work>
+            <work name="client8-write-1m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-1m-t256-r2-;containers=r(77,80);objects=r(1,500);sizes=c(1)MB" id="op12"/>
+            </work>             
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>
+
+        <workstage name="client-write-32m" closuredelay="0" config="">
+            <work name="client1-write-32m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(1,10);objects=r(1,500);sizes=c(32)MB" id="op1"/>
+            </work>
+            <work name="client2-write-32m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client2" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(11,20);objects=r(1,500);sizes=c(32)MB" id="op2"/>
+            </work>         
+            <work name="client3-write-32m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client3" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(21,30);objects=r(1,500);sizes=c(32)MB" id="op3"/>
+            </work>
+            <work name="client4-write-32m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client4" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(31,40);objects=r(1,500);sizes=c(32)MB" id="op4"/>
+            </work>
+            <work name="client5-write-32m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client5" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(41,50);objects=r(1,500);sizes=c(32)MB" id="op5"/>
+            </work>
+            <work name="client6-write-32m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client6" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(51,60);objects=r(1,500);sizes=c(32)MB" id="op6"/>
+            </work>            
+            <work name="client7-write-32m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(61,63);objects=r(1,500);sizes=c(32)MB" id="op7"/>
+            </work>
+            <work name="client7-write-32m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(64,66);objects=r(1,500);sizes=c(32)MB" id="op8"/>
+            </work>         
+            <work name="client7-write-32m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(67,70);objects=r(1,500);sizes=c(32)MB" id="op9"/>
+            </work>
+            <work name="client8-write-32m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(71,73);objects=r(1,500);sizes=c(32)MB" id="op10"/>
+            </work>
+            <work name="client8-write-32m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(74,76);objects=r(1,500);sizes=c(32)MB" id="op11"/>
+            </work>
+            <work name="client8-write-32m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-32m-t256-r2-;containers=r(77,80);objects=r(1,500);sizes=c(32)MB" id="op12"/>
+            </work>             
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>
+
+        <workstage name="client-write-64m" closuredelay="0" config="">
+            <work name="client1-write-64m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(1,10);objects=r(1,500);sizes=c(64)MB" id="op1"/>
+            </work>
+            <work name="client2-write-64m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client2" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(11,20);objects=r(1,500);sizes=c(64)MB" id="op2"/>
+            </work>         
+            <work name="client3-write-64m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client3" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(21,30);objects=r(1,500);sizes=c(64)MB" id="op3"/>
+            </work>
+            <work name="client4-write-64m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client4" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(31,40);objects=r(1,500);sizes=c(64)MB" id="op4"/>
+            </work>
+            <work name="client5-write-64m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client5" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(41,50);objects=r(1,500);sizes=c(64)MB" id="op5"/>
+            </work>
+            <work name="client6-write-64m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client6" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(51,60);objects=r(1,500);sizes=c(64)MB" id="op6"/>
+            </work>            
+            <work name="client7-write-64m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(61,63);objects=r(1,500);sizes=c(64)MB" id="op7"/>
+            </work>
+            <work name="client7-write-64m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(64,66);objects=r(1,500);sizes=c(64)MB" id="op8"/>
+            </work>         
+            <work name="client7-write-64m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(67,70);objects=r(1,500);sizes=c(64)MB" id="op9"/>
+            </work>
+            <work name="client8-write-64m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(71,73);objects=r(1,500);sizes=c(64)MB" id="op10"/>
+            </work>
+            <work name="client8-write-64m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(74,76);objects=r(1,500);sizes=c(64)MB" id="op11"/>
+            </work>
+            <work name="client8-write-64m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-64m-t256-r2-;containers=r(77,80);objects=r(1,500);sizes=c(64)MB" id="op12"/>
+            </work>             
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>
+
+        <workstage name="client-write-128m" closuredelay="0" config="">
+            <work name="client1-write-128m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(1,10);objects=r(1,500);sizes=c(128)MB" id="op1"/>
+            </work>
+            <work name="client2-write-128m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client2" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(11,20);objects=r(1,500);sizes=c(128)MB" id="op2"/>
+            </work>         
+            <work name="client3-write-128m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client3" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(21,30);objects=r(1,500);sizes=c(128)MB" id="op3"/>
+            </work>
+            <work name="client4-write-128m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client4" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(31,40);objects=r(1,500);sizes=c(128)MB" id="op4"/>
+            </work>
+            <work name="client5-write-128m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client5" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(41,50);objects=r(1,500);sizes=c(128)MB" id="op5"/>
+            </work>
+            <work name="client6-write-128m" type="normal" workers="32"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client6" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(51,60);objects=r(1,500);sizes=c(128)MB" id="op6"/>
+            </work>            
+            <work name="client7-write-128m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.118:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(61,63);objects=r(1,500);sizes=c(128)MB" id="op7"/>
+            </work>
+            <work name="client7-write-128m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.132:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(64,66);objects=r(1,500);sizes=c(128)MB" id="op8"/>
+            </work>         
+            <work name="client7-write-128m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client7" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.135:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(67,70);objects=r(1,500);sizes=c(128)MB" id="op9"/>
+            </work>
+            <work name="client8-write-128m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.136:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(71,73);objects=r(1,500);sizes=c(128)MB" id="op10"/>
+            </work>
+            <work name="client8-write-128m" type="normal" workers="11"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.138:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(74,76);objects=r(1,500);sizes=c(128)MB" id="op11"/>
+            </work>
+            <work name="client8-write-128m" type="normal" workers="10"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client8" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.139:80"/>
+                <operation type="write" ratio="100" division="object"
+                    config="cprefix=6rgw-8client-s3-128m-t256-r2-;containers=r(77,80);objects=r(1,500);sizes=c(128)MB" id="op12"/>
+            </work>             
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;retry=10;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>                
+    </workflow>
+</workload>
