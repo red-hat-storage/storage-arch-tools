@@ -4,7 +4,32 @@ export RSH="ssh"
 
 function _usage {
   cat <<END
-Insert usage help...
+
+Smallfile benchmark script for Red Hat Software-Defined Storage Architecture Team
+  Runs iterations of smallfile with a standardized set of options and configurable
+  values to allow for running extensive loops of the script. Able to output 
+  benchmark results to git repositories.
+
+  Note: This thing makes a lot of assumptions. This help output doesn't cover
+        everything, so take a look at the script itself before diving too
+        deep into things.
+
+Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-n <size>] [-i <integer>]
+
+  -g : Enable output to git (edit the script file to define the git repo)
+
+  -c <integer> : Number of clients to run workloads
+
+  -w <integer> : Number of workers each client will run
+
+  -f <size> : Size (with k, m, g suffix) of files for test
+
+  -n <integer> : Number of files for test
+
+  -i <integer> : Number of idendical test iterations to run
+
+Primary Author/Maintainer: Dustin Black <dustin@redhat.com>
+
 END
 }
 

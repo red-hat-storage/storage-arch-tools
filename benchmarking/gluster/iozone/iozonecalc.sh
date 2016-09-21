@@ -42,7 +42,7 @@ _calc iterations[@] "$label"
 
 echo -e "spreadsheet:
 δ/µ\ttot_write\tmin_write\tmax_write\tavg_write
-${listvals[*]}" | sed s/\ /\\t/g
+${listvals[*]}" | sed s/\ /"$(printf '\t')"/g
 listvals=()
 
 echo ""
@@ -65,4 +65,4 @@ _calc iterations[@] "$label"
 
 echo -e "spreadsheet:
 δ/µ\ttot_read\tmin_read\tmax_read\tavg_read
-${listvals[*]}" | sed s/\ /\\t/g
+${listvals[*]}" | sed s/\ /"$(printf '\t')"/g
