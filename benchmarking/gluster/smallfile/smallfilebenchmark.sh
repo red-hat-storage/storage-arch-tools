@@ -133,7 +133,8 @@ if [ "$filesize" = "32" ]; then
   sizeword="tiny"
 elif [ "$filesize" = "4096" ]; then
   sizeword="small"
-else sizeword="${filesize}k"
+else
+  sizeword="${filesize}k"
 fi
 
 # If we are testing NFS, then this variable will be
