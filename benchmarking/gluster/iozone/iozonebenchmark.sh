@@ -40,6 +40,9 @@ repopath=/root/git/benchmark-gluster-smci-standard
 # iozone command path
 iozone=/root/bin/iozone
 
+# Gluster volume name we are testing
+gvolname="rep2"
+
 #!!FIXME
 # This is a client-based script and doesn't generally require
 # specific knowledge of the Gluster server-side layout. However,
@@ -132,8 +135,7 @@ else
 fi
 
 # The testname text should be modified as needed
-testname="iozone--${sizeword}-file-rw--mag-raid6-rep2-2-node-${numclients}-client-${totalworkers}-worker"
-#testname="iozone--${sizeword}-file-rw--mag-raid6-rep2-2-node-${numclients}-client-nfs-${totalworkers}-worker"
+testname="iozone--${sizeword}-file-rw--mag-raid6-${gvolname}-2-node-${numclients}-client-${totalworkers}-worker"
 
 tool=`echo ${testname} | awk -F-- '{print $1}'`
 test=`echo ${testname} | awk -F-- '{print $2}'`
@@ -141,8 +143,7 @@ testconfig=`echo ${testname} | awk -F-- '{print $3}'`
 
 # Path on the client nodes to which the I/O should be generated
 # This should be under the mount point of the tested filesystem
-iopath="/rhgs/client/rep2/iozone"
-#iopath="/rhgs/nfs-client/rep2/iozone"
+iopath="/rhgs/client/${gvolname}/iozone"
 
 # Ensure iopath exists
 echo "Creating client IO path $iopath..."
