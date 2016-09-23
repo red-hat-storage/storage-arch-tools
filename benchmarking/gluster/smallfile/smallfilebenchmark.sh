@@ -40,6 +40,13 @@ repopath=/root/git/benchmark-gluster-smci-standard
 # smallfile command path
 smallfile="python /root/bin/smallfile_cli.py"
 
+# Gluster volume name we are testing
+gvolname="rep2"
+
+# Set this to true if we are testing the NFS client instead
+# of the native client
+testnfs=false
+
 #!!FIXME
 # This is a client-based script and doesn't generally require
 # specific knowledge of the Gluster server-side layout. However,
@@ -130,8 +137,14 @@ else
   sizeword="${filesize}k"
 fi
 
+# If we are testing NFS, then this variable will be
+# inserted in the $testname and $iopath below
+if [ "$testnfs" = true ]; then
+  nfs="nfs-"
+fi
+
 # The testname text should be modified as needed
-testname="smallfile--${sizeword}-file-rw--mag-raid6-rep2-2-node-${numclients}-client-${totalworkers}-worker"
+testname="smallfile--${sizeword}-file-rw--mag-raid6-${gvolname}-2-node-${numclients}-client-${nfs}${totalworkers}-worker"
 
 tool=`echo ${testname} | awk -F-- '{print $1}'`
 test=`echo ${testname} | awk -F-- '{print $2}'`
@@ -139,7 +152,7 @@ testconfig=`echo ${testname} | awk -F-- '{print $3}'`
 
 # Path on the client nodes to which the I/O should be generated
 # This should be under the mount point of the tested filesystem
-iopath="/rhgs/client/rep2/smallfile"
+iopath="/rhgs/${nfs}client/${gvolname}/smallfile"
 
 # Ensure iopath exists
 echo "Creating client IO path $iopath..."
@@ -175,7 +188,7 @@ function _dropcaches {
 }
 
 # Base smallfile command string and complete workload
-smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $timestamp --stonewall Y"
+smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $timestamp --stonewall Y --network-sync-dir /rhgs/client/${gvolname}/smf-shared"
 workload='_dropcaches && $smallfilecmd --operation create && _dropcaches && $smallfilecmd --operation read' 
 
 # Checkout the git branch for the results output
