@@ -108,6 +108,23 @@ easy_install collectd-haproxy ;  vim /etc/collectd.conf ;
 systemctl restart collectd ; systemctl status collectd
 ```
 
+DNS Wildcard entry (optional)
+=============================
+To use Ceph with S3-style subdomains (e.g., bucket-name.domain-name.com), you need to add a wildcard to the DNS record of the DNS server you use with the ceph-radosgw daemon.
+The address of the DNS must also be specified in the Ceph configuration file with the ``rgw dns name = {hostname}`` setting.
+
+Do this on your RGW host where you want 
+```
+yum install -y dnsmasq
+echo "address=/.$(hostname -f)/<IP of RGW>" | tee --append /etc/dnsmasq.conf
+
+Edit /etc/resolv.conf and add 
+nameserver 127.0.0.1
+
+systemctl restart dnsmasq ; systemctl enable dnsmasq ; systemctl status dnsmasq
+ping dummy.<rgw hostname>
+```
+
 Useful commands
 ====================
 

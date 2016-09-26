@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workload name="6-rgw-1-client-s3-128-workers-read" description="6-rgw-1-client-s3-128-workers-read" config="">
+    <workflow config="">
+		
+<!-- ************************* Read Test ********************************* --> 
+        <workstage name="client-read-1M" closuredelay="0" config="">
+            <work name="client1-read-1M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.118:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(1,50);objects=u(1,500)" id="op1"/>
+            </work>
+            <work name="client1-read-1M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.132:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(1,50);objects=u(1,500)" id="op2"/>
+            </work>
+            <work name="client1-read-1M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.135:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(1,50);objects=u(1,500)" id="op3"/>
+            </work>
+            <work name="client1-read-1M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.136:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(1,50);objects=u(1,500)" id="op4"/>
+            </work>
+            <work name="client1-read-1M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.138:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(1,50);objects=u(1,500)" id="op5"/>
+            </work>
+            <work name="client1-read-1M" type="normal" workers="23"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.139:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(1,50);objects=u(1,500)" id="op6"/>
+            </work>             			
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>
+        <workstage name="client-read-32M" closuredelay="0" config="">
+            <work name="client1-read-32M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.118:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(51,100);objects=u(1,500)" id="op1"/>
+            </work>
+            <work name="client1-read-32M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.132:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(51,100);objects=u(1,500)" id="op2"/>
+            </work>
+            <work name="client1-read-32M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.135:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(51,100);objects=u(1,500)" id="op3"/>
+            </work>
+            <work name="client1-read-32M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.136:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(51,100);objects=u(1,500)" id="op4"/>
+            </work>
+            <work name="client1-read-32M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.138:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(51,100);objects=u(1,500)" id="op5"/>
+            </work>
+            <work name="client1-read-32M" type="normal" workers="23"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.139:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(51,100);objects=u(1,500)" id="op6"/>
+            </work>            			
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>
+        <workstage name="client-read-64M" closuredelay="0" config="">
+            <work name="client1-read-64M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.118:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(101,150);objects=u(1,500)" id="op1"/>
+            </work>
+            <work name="client1-read-64M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.132:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(101,150);objects=u(1,500)" id="op2"/>
+            </work>
+            <work name="client1-read-64M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.135:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(101,150);objects=u(1,500)" id="op3"/>
+            </work>
+            <work name="client1-read-64M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.136:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(101,150);objects=u(1,500)" id="op4"/>
+            </work>
+            <work name="client1-read-64M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.138:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(101,150);objects=u(1,500)" id="op5"/>
+            </work>
+            <work name="client1-read-64M" type="normal" workers="23"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.139:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(101,150);objects=u(1,500)" id="op6"/>
+            </work>            			
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>
+        <workstage name="client-read-128M" closuredelay="0" config="">
+            <work name="client1-read-128M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.118:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(151,200);objects=u(1,500)" id="op1"/>
+            </work>
+            <work name="client1-read-128M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.132:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(151,200);objects=u(1,500)" id="op2"/>
+            </work>
+            <work name="client1-read-128M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.135:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(151,200);objects=u(1,500)" id="op3"/>
+            </work>
+            <work name="client1-read-128M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.136:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(151,200);objects=u(1,500)" id="op4"/>
+            </work>
+            <work name="client1-read-128M" type="normal" workers="21"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.138:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(151,200);objects=u(1,500)" id="op5"/>
+            </work>
+            <work name="client1-read-128M" type="normal" workers="23"
+                interval="5" division="none" runtime="300" rampup="30"
+                rampdown="0" afr="200000" totalOps="0" totalBytes="0"
+                driver="client1" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.139:80"/>
+                <operation type="read" ratio="100" division="object"
+                    config="containers=u(151,200);objects=u(1,500)" id="op6"/>
+            </work>             			
+        </workstage>
+        <workstage name="delay" closuredelay="30" config="">
+            <work name="delay" type="delay" workers="1" interval="5"
+                division="none" runtime="0" rampup="30" rampdown="0"
+                afr="0" totalOps="1" totalBytes="0" config="">
+                <auth type="none"/>
+                <storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.140:80"/>
+                <operation type="delay" ratio="100" division="none"
+                    config="" id="op1"/>
+            </work>
+        </workstage>
+    </workflow>
+</workload>
