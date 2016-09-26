@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workload name="Prepare objects to read later" description="Prepare objects to read later" config="">	
+	<storage type="s3" config="accesskey=S3user1;secretkey=S3user1key;timeout=999999;max_connections=200;endpoint=http://10.5.13.118:80" />
+    <workflow config="">
+        
+        <workstage name="init">
+            <work name="Initialize containers" type="init" workers="1" driver="client1" config="containers=r(1,200)"/>
+        </workstage>
+		
+		 <workstage name="prepare-objects">
+            <work name="prepare-all-objects" type="prepare" workers="32" driver="client1" interval="5" config="containers=r(1,50);objects=r(1,500);sizes=c(1)MB" />
+            <work name="prepare-all-objects" type="prepare" workers="32" driver="client2" interval="5" config="containers=r(51,100);objects=r(1,500);sizes=c(32)MB" />
+            <work name="prepare-all-objects" type="prepare" workers="32" driver="client3" interval="5" config="containers=r(101,150);objects=r(1,500);sizes=c(64)MB" />
+			<work name="prepare-all-objects" type="prepare" workers="32" driver="client4" interval="5" config="containers=r(151,200);objects=r(1,500);sizes=c(128)MB" /> 
+		</workstage> 
+
+        <!-- <workstage name="client-read-1M">
+           <work name="client1-read-1M" type="normal" workers="128"  driver="client1" interval="5" division="none" runtime="60" rampup="0" rampdown="0" afr="200000" totalOps="0" totalBytes="0" config="">             
+				<operation type="read" ratio="100" division="object" config="containers=u(1,50);objects=u(1,50)" id="none"/>
+            </work> 
+        </workstage> -->
+		
+	</workflow>
+</workload>
