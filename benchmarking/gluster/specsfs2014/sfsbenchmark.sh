@@ -14,15 +14,13 @@ SPEC SFS 2014 benchmark script for Red Hat Software-Defined Storage Architecture
         everything, so take a look at the script itself before diving too
         deep into things.
 
-Usage: $(basename "${0}") [-g] [-b <SWBUILD | VDA>] [-c <integer>] [-w <integer>] [-l <integer>] [-e <integer>] [-n <integer>] [-i <integer>]
+Usage: $(basename "${0}") [-g] [-b <SWBUILD | VDA>] [-c <integer>] [-l <integer>] [-e <integer>] [-n <integer>] [-i <integer>]
 
   -g : Enable output to git (edit the script file to define the git repo)
 
   -b <SWBUILD | VDA> : Which SPEC SFS 2014 benchmark to run (we only use SWBUILD and VDA)
 
   -c <integer> : Number of clients to test with
-
-  -w <integer> : Number of workers per client
 
   -l <integer> : Initial load (business metric) applied to the first run 
 
@@ -75,10 +73,6 @@ benchmark="VDA"
 # Our standards are 1, 6, and 12
 numclients=12
 
-# Number of workers per client
-# Our standards are 1, 2, 4, and 8
-numworkers=1
-
 # Number of test iterations to run
 iterations=10
 
@@ -102,9 +96,6 @@ while getopts ":gb:c:w:l:e:n:i:h" opt; do
       ;;
     c)
       numclients=${OPTARG}
-      ;;
-    w)
-      numworkers=${OPTARG}
       ;;
     l)
       load=${OPTARG}
@@ -136,9 +127,6 @@ while getopts ":gb:c:w:l:e:n:i:h" opt; do
 done
 
 
-# Calculate total workers across all clients
-totalworkers=$(echo "${numworkers}*${numclients}" | bc)
-
 # If we are testing NFS, then this variable will be
 # inserted in the $testname and $iopath below
 if [ "$testnfs" = true ]; then
@@ -146,7 +134,7 @@ if [ "$testnfs" = true ]; then
 fi
 
 # The testname text should be modified as needed
-testname="sfs2014--$(echo "$benchmark" | tr '[:upper:]' '[:lower:]')-rw--mag-raid6-${gvolname}-tuned1-6-node-2x10gbe-${numclients}-client-${nfs}${totalworkers}-worker"
+testname="sfs2014--$(echo "$benchmark" | tr '[:upper:]' '[:lower:]')-rw--mag-raid6-${gvolname}-tuned1-6-node-2x10gbe-${numclients}-client-${nfs}-${l}-${e}-${n}"
 
 tool=`echo ${testname} | awk -F-- '{print $1}'`
 test=`echo ${testname} | awk -F-- '{print $2}'`
@@ -170,13 +158,9 @@ rcfile="/tmp/${namedate}.sfs.rc"
 # Creating the client list
 echo "Creating the client list..."
 i=0
-j=0
 while [ $i -lt $numclients ]; do
-  for worker in $(seq 1 ${numworkers}); do
-    clientlist[$j]="${clients[$i]}"
-    clientpath[$j]="${clients[$i]}:${iopath}"
-    j=$[$j+1]
-  done
+  clientlist[$i]="${clients[$i]}"
+  clientpath[$i]="${clients[$i]}:${iopath}"
   i=$[$i+1]
 done
 
