@@ -238,25 +238,23 @@ if [ "$gitenable" = true ]; then
   if [ $? -ne 0 ]; then
     gitenable=false
     echo "Error changing to ${repopath}; aborting git checkout but continuing with tests..."
-    echo "Results files will be placed in $PWD..."
+    echo "Results files will be placed in ${PWD}..."
   else
     echo "Checking out git branch ${gitbranch}..."
     git checkout ${gitbranch} 2>/dev/null || git checkout -b ${gitbranch} master
   fi
 else
-  echo "Git disabled; Results files will be placed in $PWD..."
+  echo "Git disabled; Results files will be placed in ${PWD}..."
 fi
 
 ##########
 # Run the workload iterations
 echo "Initiating $iterations test iterations..."
-#!FIXME -- Double-check, but I don't think we need to tee the results out here because sfs creates a log file on its own
-resultsfile="${namedate}.results"
 i=1
 while [ $i -le ${iterations} ]; do
-  echo "Iteration $i running; Output to ${resultsfile}..."
+  echo "Iteration $i running; Output to ${PWD}..."
   cmd="${workload}"
-  eval ${cmd} | tee -a ${resultsfile}
+  eval ${cmd}
   #echo ${cmd}
   i=$[$i+1]
 done
@@ -266,7 +264,7 @@ echo "All test iterations complete!"
 
 #Commit the changes to the git repo
 if [ "${gitenable}" != false ]; then
-  echo "Adding and committing results file to git repo..."
+  echo "Adding and committing results files to git repo..."
   git add *
   git commit -am "${testname} $(date)"
 fi
