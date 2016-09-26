@@ -65,14 +65,12 @@ defaults
     option                  redispatch
     option httpchk HEAD /
     retries                 3
-    timeout http-request        6m
-    timeout queue               6m
-    timeout connect             6m
-    timeout client              6m
-    timeout server              6m
-    timeout http-keep-alive     6m
-    timeout check               6m
     maxconn                     8000
+    timeout http-request 50000
+    timeout connect 10000
+    timeout client 50000
+    timeout http-keep-alive 50000
+    timeout server 50000
     option accept-invalid-http-request
 
 frontend  rgwhttp
