@@ -25,7 +25,7 @@ Don't use these tcp_{r,w}mem settings. The client system defaults are better, an
 
 Setting the tcp_slot_table_entries high may avoid errors/failures due to the high level of connection requests at the clients.
 
-Setting the somaxconn very high like this may avoid errors/failures due to the high level of connection requests at the clients.
+Setting the somaxconn very high like this may avoid errors/failures due to the high level of connection requests at the clients. However, the 65536 is apparently outside the acceptable range for the value, resulting in an error. 65535 seems to be the maximum value
 
 Setting the tcp_fin_timeout this artifically low might be beneficial to the test runtime.
 
