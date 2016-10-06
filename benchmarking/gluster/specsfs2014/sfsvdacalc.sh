@@ -6,13 +6,20 @@ listvals=()
 
 function _calc() {
   declare -a i=("${!1}")
+  # Calculate sum total of iterations
   total=$(echo ${i[@]} | sed s/\ /+/g | bc)
+  # Count number of iterations
   count=${#i[@]}
+  # Calculate average of iterations
   avg=$(echo "scale=2; $total / $count" | bc)
+  # Calculate standard deviation of iterations
   sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};print sqrt(sum/C)}')
+  # Output label, average, and standard deviation
   echo "$2 = $avg (δ $sd)"
   if [ "$3" == "true" ]; then
+    # Calculate coefficient of variance
     cv=$(echo "scale=4; $sd / $avg" | bc)
+    # Convert coefficient to percentage
     cvpct="$(printf %.2f $(echo "scale=2; $cv*100" | bc))%"
     listvals+=("$cvpct")
   fi
@@ -23,48 +30,48 @@ busmetrics=($(cat $1 | awk '{print $1}' | egrep -v 'Business|Metric' | sort -un)
 
 for metric in $(echo ${busmetrics[@]}); do
 
-echo "-------------------------"
+  echo "-------------------------"
 
-echo "Business Metric = $metric"
+  echo "BUSINESS METRIC = $metric"
 
-echo ""
+  echo ""
 
-label="Achieved Op Rate"
-iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $3}'))
-_calc iterations[@] "$label" false > /dev/null
-achoprate=$avg
+  label="Achieved Op Rate"
+  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $3}'))
+  _calc iterations[@] "$label" true
+  achoprate=$avg
 
-label="Requested Op Rate"
-iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $2}'))
-_calc iterations[@] "$label" false > /dev/null
-reqoprate=$avg
+  label="Requested Op Rate"
+  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $2}'))
+  _calc iterations[@] "$label" false > /dev/null
+  reqoprate=$avg
+  # We are only using req op rate for calculateion of op efficiency,
+  # so here we remove its element from the listvals array
+  unset listvals[${#listvals[@]}-1]
 
-opefficiency=$(echo "scale=4; $achoprate / $reqoprate" | bc)
-opeffpct="$(printf %.2f $(echo "scale=2; $opefficiency*100" | bc))%"
-echo "Operation Rate Efficiency = $opeffpct"
+  opefficiency=$(echo "scale=4; $achoprate / $reqoprate" | bc)
+  opeffpct="$(printf %.2f $(echo "scale=2; $opefficiency*100" | bc))%"
+  echo "Operation Rate Efficiency = $opeffpct"
 
-listvals=()
+  echo ""
 
-echo ""
+  label="Avg Latency"
+  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $4}'))
+  _calc iterations[@] "$label" false
 
-label="Tot Write Throughput"
-iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $7}'))
-_calc iterations[@] "$label" true
 
-echo -e "spreadsheet:
-δ/µ\ttot_write
-${listvals[*]}" | sed s/\ /"$(printf '\t')"/g
-listvals=()
+  label="Tot Throughput"
+  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $5}'))
+  _calc iterations[@] "$label" false
 
-echo ""
+  fails=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $17}'))
+  echo "Number of Failures = ${#fails[@]}"
 
-label="Tot Read Throughput"
-iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $6}'))
-_calc iterations[@] "$label" true
+  echo ""
 
-echo -e "spreadsheet:
-δ/µ\ttot_read
-${listvals[*]}" | sed s/\ /"$(printf '\t')"/g
-listvals=()
+  echo -e "spreadsheet:
+δ/µ\tach_op\tavg_lat\ttot_through\tfailures
+${listvals[*]} ${#fails[@]}" | sed s/\ /"$(printf '\t')"/g
+  listvals=()
 
 done
