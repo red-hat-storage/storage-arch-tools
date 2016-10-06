@@ -134,7 +134,7 @@ if [ "$testnfs" = true ]; then
 fi
 
 # The testname text should be modified as needed
-testname="sfs2014--$(echo "$benchmark" | tr '[:upper:]' '[:lower:]')-rw--mag-raid6-${gvolname}-tuned1-6-node-2x10gbe-${numclients}-client-${nfs}-${load}-${incrload}-${numruns}"
+testname="sfs2014--$(echo "$benchmark" | tr '[:upper:]' '[:lower:]')-rw--mag-raid6-${gvolname}-tuned1-6-node-2x10gbe-${numclients}-client-${nfs}${load}-${incrload}-${numruns}"
 
 tool=`echo ${testname} | awk -F-- '{print $1}'`
 test=`echo ${testname} | awk -F-- '{print $2}'`
