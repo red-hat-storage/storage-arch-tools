@@ -36,9 +36,20 @@ for metric in $(echo ${busmetrics[@]}); do
 
   echo ""
 
+  label="Avg Latency"
+  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $4}'))
+  _calc iterations[@] "$label" true
+
+
+  label="Tot Throughput"
+  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $5}'))
+  _calc iterations[@] "$label" false
+
+  echo ""
+
   label="Achieved Op Rate"
   iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $3}'))
-  _calc iterations[@] "$label" true
+  _calc iterations[@] "$label" false
   achoprate=$avg
 
   label="Requested Op Rate"
@@ -53,24 +64,13 @@ for metric in $(echo ${busmetrics[@]}); do
   opeffpct="$(printf %.2f $(echo "scale=2; $opefficiency*100" | bc))%"
   echo "Operation Rate Efficiency = $opeffpct"
 
-  echo ""
-
-  label="Avg Latency"
-  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $4}'))
-  _calc iterations[@] "$label" false
-
-
-  label="Tot Throughput"
-  iterations=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $5}'))
-  _calc iterations[@] "$label" false
-
   fails=($(cat $1 | awk -v metric="$metric" '$1 == metric' | awk '{print $17}'))
   echo "Number of Failures = ${#fails[@]}"
 
   echo ""
 
   echo -e "spreadsheet:
-δ/µ\tach_op\tavg_lat\ttot_through\tfailures
+δ/µ\tavg_lat\ttot_through\tach_op\tfailures
 ${listvals[*]} ${#fails[@]}" | sed s/\ /"$(printf '\t')"/g
   listvals=()
 
