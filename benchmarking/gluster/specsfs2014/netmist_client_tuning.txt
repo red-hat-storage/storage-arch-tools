@@ -1,0 +1,35 @@
+From user guide appendix c:
+
+if your NIC type == 10 GigE
+ echo "300000" > /proc/sys/net/core/netdev_max_backlog
+fi
+echo "131071" > /proc/sys/net/core/rmem_default
+echo "131071" > /proc/sys/net/core/rmem_max
+echo "131071" > /proc/sys/net/core/wmem_default
+echo "131071" > /proc/sys/net/core/wmem_max
+echo "4096 87380 8388608" > /proc/sys/net/ipv4/tcp_rmem
+echo "4096 87380 8388608" > /proc/sys/net/ipv4/tcp_wmem
+echo "128" > /proc/sys/sunrpc/tcp_slot_table_entries
+echo "65536" > /proc/sys/net/core/somaxconn
+echo "5" > /proc/sys/net/ipv4/tcp_fin_timeout
+
+-----
+
+Notes:
+
+Setting netdev_max_backlog this high may not be necessary, as I haven't seen dropped packets recorded in column 2 of /proc/net/softnet_stat, however it may not hurt as a proactive step.
+
+I don't see a good argument for setting the {r,w}mem_{default,max} values so artifically low.
+
+Don't use these tcp_{r,w}mem settings. The client system defaults are better, and the recommendation above ignores the fact that the max value will not override the {r,w}mem_max that is set artifically low in the recommendations.
+
+Setting the tcp_slot_table_entries high may avoid errors/failures due to the high level of connection requests at the clients.
+
+Setting the somaxconn very high like this may avoid errors/failures due to the high level of connection requests at the clients. However, the 65536 is apparently outside the acceptable range for the value, resulting in an error. 65535 seems to be the maximum value
+
+Setting the tcp_fin_timeout this artifically low might be beneficial to the test runtime.
+
+After applying the changes, it may be useful to 'echo 1 > /proc/sys/net/ipv4/route/flush
+It also may be important to 'mount -o remount' the tested filesystem
+
+The only sure way to reset all tunables to defaults is to reboot.
