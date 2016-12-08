@@ -188,6 +188,17 @@ function _dropcaches {
 }
 
 # Base smallfile command string and complete workload
+# NOTE: You can encounter problems testing NFS (and likely other protocols)
+# when your network-sync-dir is on the NFS share. By default, without the flag,
+# this share is in a subdirectory of the --top path. To work around this
+# potential problem, we explicitly set in the command below the
+# network-sync-dir to the Gluster native client mount point. This way, whether
+# we are running our test against the native or NFS client, we don't have to
+# worry about this behavior. This DOES in turn assume that the volume is
+# mounted at the test master and all clients via the natvie mount point for
+# all tests, native or NFS.
+# See for more info:
+# https://github.com/bengland2/smallfile#use-with-distributed-filesystems
 smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $timestamp --stonewall Y --network-sync-dir /rhgs/client/${gvolname}/smf-shared"
 workload='_dropcaches && $smallfilecmd --operation create && _dropcaches && $smallfilecmd --operation read' 
 
