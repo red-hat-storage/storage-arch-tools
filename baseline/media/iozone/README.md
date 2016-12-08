@@ -21,7 +21,9 @@ Local tests should be done with the `iozonebenchmark.sh` script, located under `
 To run a local test, set the `-c 1` flag, as you will only be testing from a local client to a local mountpoint. We generally test locally with a 4GB file size and a 4MB transaction size. The number of workers should be increased exponentially through around a half-dozen test cycles to find the maximum throughput capabilites of the filesystem for both reads and writes. Each individual test should be run several times (we usually do 5) in order to calculate averages and standard deviations.
 
 Example run loop:
-`for w in 1 2 4 8 16 32; do iozonebenchmark.sh -g -c 1 -w $w -f 4g -r 4m -i 5; done`
+```
+for w in 1 2 4 8 16 32; do iozonebenchmark.sh -g -c 1 -w $w -f 4g -r 4m -i 5; done
+```
 
 ## Interpreting the output with iozonecalc.sh
 The above example loop will output a set of `.results` files named based on the `testname` variable and a time stamp. There will be a `.results` file for each cycle of the `for` loop; all iterations within that cycle (the same test run multiple times, according to the `-i` flag) will dump output to a single `.results` file.
