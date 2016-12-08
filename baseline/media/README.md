@@ -6,7 +6,7 @@
 		- Ceph P&S Dell (730xd , DSS7000 )
 		- Gluster P&S QCT
 	- IOzone for the following projects
-		- Gluster HCI on SuperMicro
+		- Gluster P&S SuperMicro
 - After each test run, it's a good idea to drop system cache.
 ```
 # sync; echo 3 > /proc/sys/vm/drop_caches
