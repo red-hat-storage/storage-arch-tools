@@ -35,4 +35,6 @@ Under FIO directory you will find different ways to trigger FIO
 
 
 ## IOzone
+IOzone will allow you baseline the complete local IO stack, from disk to RAID to LVM to filesystem. This is an important metric as it is a fundamental stack from the perspective of the distributed storage system and it allows a point of comparison for distributed test runs.
 
+Under the `iozone` directory is a set of instructions for how to use our `iozonebenchmark.sh` distributed test script to test a local filesystem mount point. This is a *single filesystem* test, which may underneath be represented by either a single physical disk or a virtual disk built on top of layers of block abstraction.
