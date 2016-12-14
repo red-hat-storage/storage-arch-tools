@@ -200,7 +200,7 @@ function _dropcaches {
 # See for more info:
 # https://github.com/bengland2/smallfile#use-with-distributed-filesystems
 smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $timestamp --stonewall Y --network-sync-dir /rhgs/client/${gvolname}/smf-shared"
-workload='_dropcaches && $smallfilecmd --operation create && _dropcaches && $smallfilecmd --operation read' 
+workload='_dropcaches && $smallfilecmd --fsync Y --operation create && _dropcaches && $smallfilecmd --operation read' 
 
 # Checkout the git branch for the results output
 if [ "$gitenable" = true ]; then
