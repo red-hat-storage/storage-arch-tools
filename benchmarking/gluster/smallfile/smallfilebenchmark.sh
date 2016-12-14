@@ -22,7 +22,7 @@ Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-n <si
 
   -w <integer> : Number of workers each client will run
 
-  -f <size> : Size (with k, m, g suffix) of files for test
+  -f <size> : Size (in KiB) of files for test
 
   -n <integer> : Number of files for test
 
@@ -200,7 +200,7 @@ function _dropcaches {
 # See for more info:
 # https://github.com/bengland2/smallfile#use-with-distributed-filesystems
 smallfilecmd="$smallfile --threads $numworkers --file-size $filesize --files $numfiles --top $iopath --host-set $hostset --prefix $timestamp --stonewall Y --network-sync-dir /rhgs/client/${gvolname}/smf-shared"
-workload='_dropcaches && $smallfilecmd --operation create && _dropcaches && $smallfilecmd --operation read' 
+workload='_dropcaches && $smallfilecmd --fsync Y --operation create && _dropcaches && $smallfilecmd --operation read' 
 
 # Checkout the git branch for the results output
 if [ "$gitenable" = true ]; then
