@@ -22,7 +22,7 @@ Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-n <si
 
   -w <integer> : Number of workers each client will run
 
-  -f <size> : Size (with k, m, g suffix) of files for test
+  -f <size> : Size (in KiB) of files for test
 
   -n <integer> : Number of files for test
 
