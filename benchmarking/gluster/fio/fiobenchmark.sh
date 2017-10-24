@@ -192,7 +192,7 @@ for jobfile in $writejobfile $readjobfile; do
 [global]
 directory=$iopath
 ioengine=sync
-unlink=1
+#unlink=1
 nrfiles=1
 iodepth=1
 openfiles=1
@@ -263,8 +263,19 @@ i=1
 while [ $i -le ${iterations} ]; do
   echo "Iteration $i running; Output to ${resultsfile}..."
   cmd="${workload}"
-  eval ${cmd} | tee -a ${resultsfile}
+  eval ${cmd} | tee -a ${resultsfile}.temp
   #echo ${cmd}
+  echo "" | tee -a ${resultsfile}.temp
+  # Get iteration total throughput
+  writeiterations=($(grep WRITE ${resultsfile}.temp | awk '{print $3}' | awk -F= '{print $2}' | awk -FK '{print $1}'))
+  writetotal=$(echo ${writeiterations[@]} | sed s/\ /+/g | bc)
+  echo "Iteration $i write total throughtput = ${writetotal}" | tee -a ${resultsfile}.temp
+  readiterations=($(grep READ ${resultsfile}.temp | awk '{print $3}' | awk -F= '{print $2}' | awk -FK '{print $1}'))
+  readtotal=$(echo ${readiterations[@]} | sed s/\ /+/g | bc)
+  echo "Iteration $i read total throughtput = ${readtotal}" | tee -a ${resultsfile}.temp
+  echo "" | tee -a ${resultsfile}.temp
+  cat ${resultsfile}.temp >> ${resultsfile}
+  rm -f ${resultsfile}.temp
   i=$[$i+1]
 done
 echo "All test iterations complete!"
