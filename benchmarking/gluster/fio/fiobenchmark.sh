@@ -26,6 +26,8 @@ Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-r <si
 
   -r <size> : Size (with k, m, g suffix) of transaction records
 
+  -n <integer> : Number of files per worker
+
   -i <integer> : Number of idendical test iterations to run
 
 Primary Author/Maintainer: Dustin Black <dustin@redhat.com>
@@ -78,11 +80,14 @@ filesize="4g"
 # Transaction record size
 recordsize="4m"
 
+# Number of files per worker
+numfiles=1
+
 # Number of test iterations to run
 iterations=10
 
 # Capture and act on command flags
-while getopts ":gc:w:f:r:i:h" opt; do
+while getopts ":gc:w:f:r:n:i:h" opt; do
   case ${opt} in
     g)
       gitenable=true
@@ -98,6 +103,9 @@ while getopts ":gc:w:f:r:i:h" opt; do
       ;;
     r)
       recordsize="${OPTARG}"
+      ;;
+    n)
+      numfiles="${OPTARG}"
       ;;
     i)
       iterations=${OPTARG}
@@ -132,8 +140,12 @@ elif [ "$filesize" = "128g" ]; then
   sizeword="xlarge"
 elif [ "$filesize" = "256g" ]; then
   sizeword="jumbo1"
-elif [ "$filesize" = "512" ]; then
+elif [ "$filesize" = "512g" ]; then
   sizeword="jumbo2"
+elif [ "$filesize" = "4m" ]; then
+  sizeword="small"
+elif [ "$filesize" = "32k" ]; then
+  sizeword="tiny"
 else
   sizeword="$filesize"
 fi
@@ -193,9 +205,9 @@ for jobfile in $writejobfile $readjobfile; do
 directory=$iopath
 ioengine=sync
 #unlink=1
-nrfiles=1
-iodepth=1
-openfiles=1
+nrfiles=$numfiles
+iodepth=$numfiles
+openfiles=$numfiles
 fsync_on_close=1
 group_reporting
 startdelay=0

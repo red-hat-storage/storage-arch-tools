@@ -2,20 +2,15 @@
 
 file=$1
 
-#numclients=$2
-
 listvals=()
 
 function _calc() {
   declare -a i=("${!1}")
   total=$(echo ${i[@]} | sed s/\ /+/g | bc)
-  #avgtotal=$(echo "$total / $numclients" | bc)
   count=${#i[@]}
   avg=$(echo "scale=2; $total / $count" | bc)
-  sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};print sqrt(sum/C)}')
+  sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};printf "%.2f", sqrt(sum/C)}')
   echo "$2 = $avg (δ $sd)"
-  #echo "$2 = $total"
-  #echo "$(echo ${i[@]} | sed s/\ /\\t/g)"
   if [ "$3" == "true" ]; then
     cv=$(echo "scale=4; $sd / $avg" | bc)
     cvpct="$(printf %.2f $(echo "scale=2; $cv*100" | bc))%"
@@ -32,6 +27,7 @@ label="Tot Write Throughput"
 #iterations=($(grep WRITE $1 | awk '{print $3}' | awk -F= '{print $2}' | awk -FK '{print $1}'))
 iterations=($(grep Iteration $1 | grep write | awk -F= '{print $2}'))
 _calc iterations[@] "$label" true
+
 
 #label="Min Write Throughput"
 #iterations=($(grep -A4 Children $1 | grep -A4 writers | grep 'Min throughput' | awk -F= '{print $2}' | awk '{print $1}'))
