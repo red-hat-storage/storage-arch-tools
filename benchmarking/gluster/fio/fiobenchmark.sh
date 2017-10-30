@@ -287,7 +287,7 @@ while [ $i -le ${iterations} ]; do
       writeiterations[$n]=$(echo $iteration | awk -FK '{print $1}')
     elif [[ $iteration == *MB* ]]; then
       convertme=$(echo $iteration | awk -FM '{print $1}')
-      writeiterations[$n]=$(echo $convertme * 1024 | bc)
+      writeiterations[$n]=$(echo "$convertme * 1024" | bc)
     else
       writeiterations[$n]=""
     fi
@@ -303,7 +303,7 @@ while [ $i -le ${iterations} ]; do
       readiterations[$n]=$(echo $iteration | awk -FK '{print $1}')
     elif [[ $iteration == *MB* ]]; then
       convertme=$(echo $iteration | awk -FM '{print $1}')
-      readiterations[$n]=$(echo $convertme * 1024 | bc)
+      readiterations[$n]=$(echo "$convertme * 1024" | bc)
     else
       readiterations[$n]=""
     fi
