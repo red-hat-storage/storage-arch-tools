@@ -205,6 +205,7 @@ for jobfile in $writejobfile $readjobfile; do
 directory=$iopath
 ioengine=sync
 #unlink=1
+direct=1
 nrfiles=$numfiles
 iodepth=$numfiles
 openfiles=$numfiles
