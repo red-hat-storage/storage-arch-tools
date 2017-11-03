@@ -204,7 +204,7 @@ for jobfile in $writejobfile $readjobfile; do
 [global]
 directory=$iopath
 ioengine=sync
-#unlink=1
+unlink=1
 direct=1
 nrfiles=$numfiles
 iodepth=$numfiles
@@ -230,6 +230,7 @@ echo "Creating read job file $readjobfile..."
 cat << EOF >> $readjobfile
 [seqread]
 readwrite=read
+fallocate=keep
 EOF
 
 # Command to drop disk caches
