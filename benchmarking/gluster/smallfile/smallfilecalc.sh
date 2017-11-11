@@ -23,6 +23,12 @@ function _calc() {
 
 echo ""
 
+failcheck=`grep not\ enough $file | wc -l`
+if [ $failcheck -gt 0 ]; then
+  echo "!! AT LEAST ONE ITERATION FAILED -- CHECK RESULTS !!"
+  echo ""
+fi
+
 label="Tot Write Throughput"
 iterations=($(cat $1 | sed -n '/operation : create/,/operation : read/p' | grep 'files/sec' | awk '{print $1}'))
 _calc iterations[@] "$label" true
