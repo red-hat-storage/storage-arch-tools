@@ -282,7 +282,7 @@ while [ $i -le ${iterations} ]; do
   echo "" | tee -a ${resultsfile}.temp
   # Get iteration total throughput
   #writeiterations=($(grep WRITE ${resultsfile}.temp | awk '{print $3}' | awk -F= '{print $2}' | awk -FK '{print $1}'))
-  writeiterations=($(grep WRITE ${resultsfile}.temp | awk '{print $3}' | awk -F= '{print $2}'))
+  writeiterations=($(grep WRITE ${resultsfile}.temp | awk '{print $2}' | awk -F= '{print $2}'))
   n=0
   for iteration in "${writeiterations[@]}"; do
     if [[ $iteration == *KB* ]]; then
@@ -298,7 +298,7 @@ while [ $i -le ${iterations} ]; do
   writetotal=$(echo ${writeiterations[@]} | sed s/\ /+/g | bc)
   echo "Iteration $i write total throughtput = ${writetotal}" | tee -a ${resultsfile}.temp
   #readiterations=($(grep READ ${resultsfile}.temp | awk '{print $3}' | awk -F= '{print $2}' | awk -FK '{print $1}'))
-  readiterations=($(grep READ ${resultsfile}.temp | awk '{print $3}' | awk -F= '{print $2}'))
+  readiterations=($(grep READ ${resultsfile}.temp | awk '{print $2}' | awk -F= '{print $2}'))
   n=0
   for iteration in "${readiterations[@]}"; do
     if [[ $iteration == *KB* ]]; then
