@@ -285,9 +285,9 @@ while [ $i -le ${iterations} ]; do
   writeiterations=($(grep WRITE ${resultsfile}.temp | awk '{print $2}' | awk -F= '{print $2}'))
   n=0
   for iteration in "${writeiterations[@]}"; do
-    if [[ $iteration == *KB* ]]; then
+    if [[ $iteration == *KiB* ]]; then
       writeiterations[$n]=$(echo $iteration | awk -FK '{print $1}')
-    elif [[ $iteration == *MB* ]]; then
+    elif [[ $iteration == *MiB* ]]; then
       convertme=$(echo $iteration | awk -FM '{print $1}')
       writeiterations[$n]=$(echo "$convertme * 1024" | bc)
     else
@@ -301,9 +301,9 @@ while [ $i -le ${iterations} ]; do
   readiterations=($(grep READ ${resultsfile}.temp | awk '{print $2}' | awk -F= '{print $2}'))
   n=0
   for iteration in "${readiterations[@]}"; do
-    if [[ $iteration == *KB* ]]; then
+    if [[ $iteration == *KiB* ]]; then
       readiterations[$n]=$(echo $iteration | awk -FK '{print $1}')
-    elif [[ $iteration == *MB* ]]; then
+    elif [[ $iteration == *MiB* ]]; then
       convertme=$(echo $iteration | awk -FM '{print $1}')
       readiterations[$n]=$(echo "$convertme * 1024" | bc)
     else
