@@ -9,11 +9,11 @@ function _calc() {
   total=$(echo ${i[@]} | sed s/\ /+/g | bc)
   count=${#i[@]}
   avg=$(echo "scale=2; $total / $count" | bc)
-  sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};printf "%.2f", sqrt(sum/C)}')
+  sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};/usr/bin/printf "%.2f", sqrt(sum/C)}')
   echo "$2 = $avg (δ $sd)"
   if [ "$3" == "true" ]; then
     cv=$(echo "scale=4; $sd / $avg" | bc)
-    cvpct="$(printf %.2f $(echo "scale=2; $cv*100" | bc))%"
+    cvpct="$(/usr/bin/printf %.2f $(echo "scale=2; $cv*100" | bc))%"
     listvals+=("$cvpct")
   fi
   listvals+=("$avg")
@@ -43,7 +43,7 @@ _calc iterations[@] "$label" true
 
 echo -e "spreadsheet:
 δ/µ\ttot_write\tmin_write\tmax_write\tavg_write
-${listvals[*]}" | sed s/\ /"$(printf '\t')"/g
+${listvals[*]}" | sed s/\ /"$(/usr/bin/printf '\t')"/g
 listvals=()
 
 echo ""
@@ -70,4 +70,4 @@ _calc iterations[@] "$label" true
 
 echo -e "spreadsheet:
 δ/µ\ttot_read\t
-${listvals[*]}" | sed s/\ /"$(printf '\t')"/g
+${listvals[*]}" | sed s/\ /"$(/usr/bin/printf '\t')"/g
