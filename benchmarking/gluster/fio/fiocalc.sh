@@ -9,7 +9,7 @@ function _calc() {
   total=$(echo ${i[@]} | sed s/\ /+/g | bc)
   count=${#i[@]}
   avg=$(echo "scale=2; $total / $count" | bc)
-  sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};/usr/bin/printf "%.2f", sqrt(sum/C)}')
+  sd=$(echo ${i[@]} | awk -v M=$avg -v C=$count '{for(n=1;n<=C;n++){sum+=($n-M)*($n-M)};printf "%.2f", sqrt(sum/C)}')
   echo "$2 = $avg (δ $sd)"
   if [ "$3" == "true" ]; then
     cv=$(echo "scale=4; $sd / $avg" | bc)
