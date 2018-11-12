@@ -14,7 +14,7 @@ FIO benchmark script for Red Hat Software-Defined Storage Architecture Team
         everything, so take a look at the script itself before diving too
         deep into things.
 
-Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-r <size>] [-i <integer>]
+Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-r <size>] [-i <integer>]  [-t <integer>]
 
   -g : Enable output to git (edit the script file to define the git repo)
 
@@ -29,6 +29,8 @@ Usage: $(basename "${0}") [-g] [-c <integer>] [-w <integer>] [-f <size>] [-r <si
   -n <integer> : Number of files per worker
 
   -i <integer> : Number of idendical test iterations to run
+
+  -t <integer> : Number of minutes for time-based run
 
 Primary Author/Maintainer: Dustin Black <dustin@redhat.com>
 
@@ -47,7 +49,7 @@ gvolname="gluster1"
 
 # Set this to true if we are testing the NFS client instead
 # of the native client
-testnfs=true
+testnfs=false
 
 #!!FIXME
 # This is a client-based script and doesn't generally require
@@ -87,7 +89,7 @@ numfiles=1
 iterations=10
 
 # Capture and act on command flags
-while getopts ":gc:w:f:r:n:i:h" opt; do
+while getopts ":gc:w:f:r:n:i:t:h" opt; do
   case ${opt} in
     g)
       gitenable=true
@@ -109,6 +111,9 @@ while getopts ":gc:w:f:r:n:i:h" opt; do
       ;;
     i)
       iterations=${OPTARG}
+      ;;
+    t)
+      runtime=${OPTARG}
       ;;
     h)
       _usage
@@ -157,7 +162,7 @@ if [ "$testnfs" = true ]; then
 fi
 
 # The testname text should be modified as needed
-testname="fio--${sizeword}-file-rw--mag-raid6-wb-${gvolname}-tuned1-4-node-2x10gbe-${numclients}-client-${nfs}${totalworkers}-worker"
+testname="fio--${sizeword}-file-rw--${gvolname}-${numclients}-client-${nfs}${totalworkers}-worker"
 
 tool=`echo ${testname} | awk -F-- '{print $1}'`
 test=`echo ${testname} | awk -F-- '{print $2}'`
@@ -170,7 +175,7 @@ iopath="/mnt/fio"
 
 # Ensure iopath exists
 echo "Creating client IO path $iopath..."
-ssh root@${clients[0]} "mkdir -p $iopath"
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${clients[0]} "mkdir -p $iopath"
 
 # Path to the cluster file to be passed to fio 
 namedate="${testname}-$(date +%F-%H-%M-%S)"
@@ -215,6 +220,8 @@ startdelay=0
 blocksize=$recordsize
 filesize=$filesize
 numjobs=$numworkers
+time_based
+runtime=${runtime}m
 
 EOF
 done
@@ -222,6 +229,8 @@ done
 echo "Creating write job file $writejobfile..."
 cat << EOF >> $writejobfile
 [seqwrite]
+#readwrite=readwrite
+#rwmixwrite=90
 readwrite=write
 create_on_open=1
 EOF
@@ -239,10 +248,10 @@ dropcachescmd='sync ; echo 3 > /proc/sys/vm/drop_caches'
 # Function to drop caches on all clients and servers
 function _dropcaches {
   for client in $(echo ${clientlist[*]}); do
-    ssh root@${client} "eval $dropcachescmd"
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${client} "eval $dropcachescmd"
   done
   for server in $(echo ${servers[*]}); do
-    ssh root@${server} "eval $dropcachescmd"
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@${server} "eval $dropcachescmd"
   done
 }
 
@@ -250,6 +259,7 @@ function _dropcaches {
 #fiocmd="$fio -t $totalworkers -s $filesize -r $recordsize -+m $clusterfile -c -e -w -+z -+n"
 fiocmd="$fio --client=$clusterfile"
 workload='_dropcaches && $fiocmd $writejobfile && _dropcaches && $fiocmd $readjobfile' 
+#workload='_dropcaches && $fiocmd $writejobfile'
 
 # Checkout the git branch for the results output
 if [ "$gitenable" = true ]; then
@@ -275,6 +285,12 @@ echo "Initiating $iterations test iterations..."
 resultsfile="${namedate}.results"
 i=1
 while [ $i -le ${iterations} ]; do
+  if [[ $i == 1 ]]; then
+    echo "Warmup run..."
+    eval ${cmd}
+    echo "Warmup run complete"
+  fi
+  starttime="$(($(date +%s) * 1000))"
   echo "Iteration $i running; Output to ${resultsfile}..."
   cmd="${workload}"
   eval ${cmd} | tee -a ${resultsfile}.temp
@@ -316,6 +332,11 @@ while [ $i -le ${iterations} ]; do
   echo "" | tee -a ${resultsfile}.temp
   cat ${resultsfile}.temp >> ${resultsfile}
   rm -f ${resultsfile}.temp
+  echo "Adding annotation to grafana"
+  echo " "
+  curl -X POST http://<user>:<password>@<grafana_host>:3000/api/annotations \
+    -H "Content-Type: application/json"\
+    -d '{"dashboardId":8,"time":'${starttime}',"isRegion":true,"timeEnd":'${endtime}',"tags":["'${uuid}'","basic"],"text":"'${testname}--run${i}'"}'
   i=$[$i+1]
 done
 echo "All test iterations complete!"
