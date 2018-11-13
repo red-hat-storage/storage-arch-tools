@@ -282,8 +282,9 @@ fi
 
 ##########
 # Run the workload iterations
-echo "Initiating $iterations test iterations..."
+cmd="${workload}"
 resultsfile="${namedate}.results"
+echo "Initiating $iterations test iterations..."
 i=1
 while [ $i -le ${iterations} ]; do
   if [[ $i == 1 ]]; then
@@ -293,7 +294,6 @@ while [ $i -le ${iterations} ]; do
   fi
   starttime="$(($(date +%s) * 1000))"
   echo "Iteration $i running; Output to ${resultsfile}..."
-  cmd="${workload}"
   eval ${cmd} | tee -a ${resultsfile}.temp
   #echo ${cmd}
   echo "" | tee -a ${resultsfile}.temp
