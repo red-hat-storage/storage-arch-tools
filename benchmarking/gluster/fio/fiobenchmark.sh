@@ -162,7 +162,8 @@ if [ "$testnfs" = true ]; then
 fi
 
 # The testname text should be modified as needed
-testname="fio--${sizeword}-file-rw--${gvolname}-${numclients}-client-${nfs}${totalworkers}-worker"
+uuid=$(uuidgen)
+testname="fio--${sizeword}-file-rw--${gvolname}-${numclients}-client-${nfs}${totalworkers}-worker-${runtime}m-runtime--${uuid}"
 
 tool=`echo ${testname} | awk -F-- '{print $1}'`
 test=`echo ${testname} | awk -F-- '{print $2}'`
