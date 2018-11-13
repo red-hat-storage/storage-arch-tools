@@ -282,11 +282,11 @@ fi
 
 ##########
 # Run the workload iterations
-cmd="${workload}"
 resultsfile="${namedate}.results"
 echo "Initiating $iterations test iterations..."
 i=1
 while [ $i -le ${iterations} ]; do
+  cmd="${workload}"
   if [[ $i == 1 ]]; then
     echo "Warmup run..."
     eval ${cmd}
